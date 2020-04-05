@@ -15,7 +15,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="VertexPaint"
+config/name="VPainter"
 config/icon="res://icon.png"
 
 [editor_plugins]

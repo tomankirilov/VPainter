@@ -18,10 +18,6 @@ var brush_opacity:float = 1.0
 var brush_hardness:float = 1.0
 var brush_spacing:float = 0.1
 
-var input_material:Material
-var preview_material:Material
-
-
 var process_drawing = false
 var hit_position
 var hit_normal
@@ -43,9 +39,7 @@ func handles(obj):
 			ui_activate_button._hide()
 			return false
 
-
 		ui_activate_button._show()
-		_setup_material()
 		return true
 	else:
 		ui_activate_button._hide()
@@ -157,64 +151,8 @@ func _make_local_copy():
 	print("works?")
 	current_mesh.mesh = current_mesh.mesh.duplicate(false)
 
-#INPUT MATERIAL:
-func _load_input_material():
-	if (!current_mesh.mesh):
-		return
-	if current_mesh.get_surface_material(0):
-		input_material = current_mesh.get_surface_material(0)
-
-func _set_input_material():
-	if !current_mesh:
-		return
-
-	if (!current_mesh.mesh):
-		return
-
-	if input_material:
-		current_mesh.set_surface_material(0, input_material)
-	else:
-		current_mesh.set_surface_material(0, null)
-
-
-#PREVIEW MATERIAL:
-
-func _load_preview_material():
-	preview_material = load("res://addons/vpainter/materials/mtl_vertex_color.tres")
-
-func _setup_material():
-	#CHECK IF THERE IS A MESH INSTANCE NODE:
-	if !current_mesh:
-		return
-	#CHECK IF THE MESH INSTANCE NODE HAS A MESH RESOURCE:
-	if (!current_mesh.mesh):
-		return
-
-	#IF THE MESH HAS NO MATERIAL:
-	if (!current_mesh.get_surface_material(0)):
-		input_material = null #RECORD THAT THE MESH HAS NO MATERIAL.
-	#IF THE OBJECT HAS A MATERIAL:
-	else:					  #RECORD THE MATERIAL AS INPUT MATERIAL.
-		input_material = current_mesh.get_surface_material(0)
-
-func _set_preview_material():
-	#APPLY THE PREVIEW MATERIAL.
-	current_mesh.set_surface_material(0, preview_material)
-
-func _preview_r(value:bool):
-	preview_material.set_shader_param("show_r", value)
-
-func _preview_g(value:bool):
-	preview_material.set_shader_param("show_g", value)
-
-func _preview_b(value:bool):
-	preview_material.set_shader_param("show_b", value)
-
-
 #LOAD AND UNLOAD ADDON:
 func _enter_tree():
-	#LOAD PREVIEW MATERIAL:
-	_load_preview_material()
 	#SETUP THE SIDEBAR:
 	ui_sidebar = preload("res://addons/vpainter/vpainter_ui.tscn").instance()
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)

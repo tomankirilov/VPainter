@@ -32,5 +32,4 @@ func _set_ui_sidebar(value):
 		ui_sidebar.show()
 	else:
 		ui_sidebar.hide()
-		ui_sidebar._set_preview_material(false)
 		vpainter._set_paint_mode(false)

@@ -40,20 +40,6 @@ var brush_spacing_slider:HSlider
 export var blend_modes_path:NodePath
 var blend_modes:OptionButton
 
-#MATERIAL PREVIEW:
-export var button_m_path:NodePath
-var button_m:ToolButton
-
-export var button_r_path:NodePath
-var button_r:ToolButton
-
-export var button_g_path:NodePath
-var button_g:ToolButton
-
-export var button_b_path:NodePath
-var button_b:ToolButton
-
-
 func _enter_tree():
 	local_copy_button = get_node(local_copy_button_path)
 	local_copy_button.connect("button_down", self, "_make_local_copy")
@@ -87,19 +73,6 @@ func _enter_tree():
 	blend_modes.add_item("SUBTRACT", 2)
 	blend_modes.add_item("MULTIPLY", 3)
 	blend_modes.add_item("DIVIDE", 4)
-
-	button_m = get_node(button_m_path)
-	button_m.connect("toggled", self, "_set_preview_material")
-	
-	button_r = get_node(button_r_path)
-	button_r.connect("toggled", self, "_set_r_channel")
-	
-	button_g = get_node(button_g_path)
-	button_g.connect("toggled", self, "_set_g_channel")
-
-	button_b = get_node(button_b_path)
-	button_b.connect("toggled", self, "_set_b_channel")
-
 
 	button_paint.set_pressed(true)
 
@@ -187,44 +160,4 @@ func _set_brush_hardness(value):
 func _set_brush_spacing(value):
 	vpainter.brush_spacing = value
 	#print("Brush spacing set: " + str(value))
-
-
-func _set_preview_material(value):
-	if value:
-#		print("SET PREVIEW MATERAIAL:")
-		vpainter._set_preview_material()
-		_set_r_channel(value)
-		_set_g_channel(value)
-		_set_b_channel(value)
-	else:
-#		print("PREVIEW TURNED OFF")
-		button_r.hide()
-		button_g.hide()
-		button_b.hide()
-		vpainter._set_input_material()
-		button_m.set_pressed(false)
-
-func _set_r_channel(value):
-	vpainter._preview_r(value)
-	if value:
-		button_r.show()
-		button_r.set_pressed(true)
-	else:
-		button_r.set_pressed(false)
-
-func _set_g_channel(value):
-	vpainter._preview_g(value)
-	if value:
-		button_g.show()
-		button_g.set_pressed(true)
-	else:
-		button_g.set_pressed(false)
-
-func _set_b_channel(value):
-	vpainter._preview_b(value)
-	if value:
-		button_b.show()
-		button_b.set_pressed(true)
-	else:
-		button_b.set_pressed(false)
 
