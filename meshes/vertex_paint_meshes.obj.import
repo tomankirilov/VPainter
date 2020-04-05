@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/vertex_paint_meshes.obj-aabd0f4ba0fc0e4461cf50c3ef82b049.mesh"
+
+[deps]
+
+files=[ "res://.import/vertex_paint_meshes.obj-aabd0f4ba0fc0e4461cf50c3ef82b049.mesh" ]
+
+source_file="res://meshes/vertex_paint_meshes.obj"
+dest_files=[ "res://.import/vertex_paint_meshes.obj-aabd0f4ba0fc0e4461cf50c3ef82b049.mesh", "res://.import/vertex_paint_meshes.obj-aabd0f4ba0fc0e4461cf50c3ef82b049.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

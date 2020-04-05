@@ -1,0 +1,240 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://addons/vpainter/vpainter_ui.gd" type="Script" id=1]
+[ext_resource path="res://addons/vpainter/res/icon_fill.svg" type="Texture" id=2]
+[ext_resource path="res://addons/vpainter/res/icon_blur.svg" type="Texture" id=3]
+[ext_resource path="res://addons/vpainter/res/icon_brush.svg" type="Texture" id=4]
+[ext_resource path="res://addons/vpainter/res/icon_select.svg" type="Texture" id=5]
+[ext_resource path="res://addons/vpainter/res/material_icons/icon_r.svg" type="Texture" id=6]
+[ext_resource path="res://addons/vpainter/res/material_icons/icon_g.svg" type="Texture" id=7]
+[ext_resource path="res://addons/vpainter/res/material_icons/icon_material.svg" type="Texture" id=8]
+[ext_resource path="res://addons/vpainter/res/material_icons/icon_b.svg" type="Texture" id=9]
+
+[node name="ui" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 192, 0 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+local_copy_button_path = NodePath("VBoxContainer/LocalCopy")
+color_picker_dir = NodePath("VBoxContainer/ColorSwatches/ColorPickerButton")
+button_select_dir = NodePath("VBoxContainer/Tools/BtnSelect")
+button_paint_dir = NodePath("VBoxContainer/Tools/BtnBrush")
+button_blur_dir = NodePath("VBoxContainer/Tools/BtnBlur")
+button_fill_dir = NodePath("VBoxContainer/Tools/BtnFill")
+brush_size_slider_dir = NodePath("VBoxContainer/Sliders/Size")
+brush_opacity_slider_dir = NodePath("VBoxContainer/Sliders/Opacity")
+brush_hardness_slider_dir = NodePath("VBoxContainer/Sliders/Hardness")
+brush_spacing_slider_dir = NodePath("VBoxContainer/Sliders/Spacing")
+blend_modes_path = NodePath("VBoxContainer/OptionButton")
+button_m_path = NodePath("HBoxContainer/M")
+button_r_path = NodePath("HBoxContainer/R")
+button_g_path = NodePath("HBoxContainer/G")
+button_b_path = NodePath("HBoxContainer/B")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 16.0
+margin_right = -832.0
+rect_min_size = Vector2( 192, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LocalCopy" type="Button" parent="VBoxContainer"]
+margin_left = 30.0
+margin_right = 162.0
+margin_bottom = 20.0
+size_flags_horizontal = 4
+text = "MAKE LOCAL COPY"
+
+[node name="Tools" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 24.0
+margin_right = 192.0
+margin_bottom = 88.0
+rect_min_size = Vector2( 0, 64 )
+alignment = 1
+
+[node name="BtnSelect" type="ToolButton" parent="VBoxContainer/Tools"]
+visible = false
+margin_left = 2.0
+margin_right = 46.0
+margin_bottom = 40.0
+toggle_mode = true
+icon = ExtResource( 5 )
+
+[node name="BtnBrush" type="ToolButton" parent="VBoxContainer/Tools"]
+margin_left = 26.0
+margin_right = 70.0
+margin_bottom = 64.0
+toggle_mode = true
+pressed = true
+icon = ExtResource( 4 )
+
+[node name="BtnBlur" type="ToolButton" parent="VBoxContainer/Tools"]
+margin_left = 74.0
+margin_right = 118.0
+margin_bottom = 64.0
+toggle_mode = true
+icon = ExtResource( 3 )
+
+[node name="BtnFill" type="ToolButton" parent="VBoxContainer/Tools"]
+margin_left = 122.0
+margin_right = 166.0
+margin_bottom = 64.0
+toggle_mode = true
+icon = ExtResource( 2 )
+
+[node name="ColorSwatches" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 92.0
+margin_right = 192.0
+margin_bottom = 156.0
+rect_min_size = Vector2( 0, 64 )
+alignment = 1
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/ColorSwatches"]
+margin_left = 46.0
+margin_top = 16.0
+margin_right = 94.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 32 )
+size_flags_vertical = 4
+flat = true
+
+[node name="ColorPickerButton2" type="ColorPickerButton" parent="VBoxContainer/ColorSwatches"]
+margin_left = 98.0
+margin_top = 16.0
+margin_right = 146.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 32 )
+size_flags_vertical = 4
+flat = true
+color = Color( 1, 1, 1, 1 )
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+margin_left = 32.0
+margin_top = 160.0
+margin_right = 160.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 128, 0 )
+hint_tooltip = "Blend mode for painting colors."
+size_flags_horizontal = 4
+text = "MIX"
+items = [ "MIX", null, false, 0, null, "ADD", null, false, 1, null, "SUBTRACT", null, false, 2, null, "MULTIPLY", null, false, 3, null, "DIVIDE", null, false, 4, null ]
+selected = 0
+
+[node name="Sliders" type="VBoxContainer" parent="VBoxContainer"]
+margin_left = 32.0
+margin_top = 184.0
+margin_right = 160.0
+margin_bottom = 440.0
+rect_min_size = Vector2( 128, 256 )
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="LSize" type="Label" parent="VBoxContainer/Sliders"]
+margin_top = 54.0
+margin_right = 128.0
+margin_bottom = 68.0
+text = "size:"
+
+[node name="Size" type="HSlider" parent="VBoxContainer/Sliders"]
+margin_top = 72.0
+margin_right = 128.0
+margin_bottom = 88.0
+size_flags_horizontal = 3
+min_value = 0.001
+max_value = 10.0
+step = 0.001
+value = 1.0
+
+[node name="LSize2" type="Label" parent="VBoxContainer/Sliders"]
+margin_top = 92.0
+margin_right = 128.0
+margin_bottom = 106.0
+text = "opacity:"
+
+[node name="Opacity" type="HSlider" parent="VBoxContainer/Sliders"]
+margin_top = 110.0
+margin_right = 128.0
+margin_bottom = 126.0
+size_flags_horizontal = 3
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+value = 1.0
+
+[node name="LSize3" type="Label" parent="VBoxContainer/Sliders"]
+margin_top = 130.0
+margin_right = 128.0
+margin_bottom = 144.0
+text = "hardness:"
+
+[node name="Hardness" type="HSlider" parent="VBoxContainer/Sliders"]
+margin_top = 148.0
+margin_right = 128.0
+margin_bottom = 164.0
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.001
+value = 1.0
+
+[node name="LSize4" type="Label" parent="VBoxContainer/Sliders"]
+margin_top = 168.0
+margin_right = 128.0
+margin_bottom = 182.0
+text = "spacing:"
+
+[node name="Spacing" type="HSlider" parent="VBoxContainer/Sliders"]
+margin_top = 186.0
+margin_right = 128.0
+margin_bottom = 202.0
+size_flags_horizontal = 3
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 0.1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -28.0
+margin_right = -836.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="M" type="ToolButton" parent="HBoxContainer"]
+margin_right = 28.0
+margin_bottom = 28.0
+toggle_mode = true
+icon = ExtResource( 8 )
+
+[node name="R" type="ToolButton" parent="HBoxContainer"]
+visible = false
+margin_left = 28.0
+margin_right = 56.0
+margin_bottom = 28.0
+toggle_mode = true
+icon = ExtResource( 6 )
+
+[node name="G" type="ToolButton" parent="HBoxContainer"]
+visible = false
+margin_left = 28.0
+margin_right = 56.0
+margin_bottom = 28.0
+toggle_mode = true
+icon = ExtResource( 7 )
+
+[node name="B" type="ToolButton" parent="HBoxContainer"]
+visible = false
+margin_left = 28.0
+margin_right = 56.0
+margin_bottom = 28.0
+toggle_mode = true
+icon = ExtResource( 9 )
