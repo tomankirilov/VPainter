@@ -11,9 +11,6 @@ export var color_picker_dir:NodePath
 var color_picker:ColorPickerButton
 
 #TOOLS:
-export var button_select_dir:NodePath
-var button_select:ToolButton
-
 export var button_paint_dir:NodePath
 var button_paint:ToolButton
 
@@ -47,8 +44,6 @@ func _enter_tree():
 	color_picker = get_node(color_picker_dir)
 	color_picker.connect("color_changed", self, "_set_paint_color")
 	
-	button_select = get_node(button_select_dir)
-	button_select.connect("toggled", self, "_set_select_tool")
 	button_paint = get_node(button_paint_dir)
 	button_paint.connect("toggled", self, "_set_paint_tool")
 	button_blur = get_node(button_blur_dir)
@@ -104,46 +99,29 @@ func _set_blend_mode(id):
 			#print("BLEND MODE = DIVIDE")
 			vpainter.blend_mode = vpainter.DIVIDE
 
-func _set_select_tool(value):
-	if value:
-		vpainter.current_tool = vpainter.SELECT
-		#print("TOOL = SELCT")
-		button_paint.set_pressed(false)
-		button_blur.set_pressed(false)
-		button_fill.set_pressed(false)
-#	else:
-#		vpainter._set_paint_mode(false)
-
 func _set_paint_tool(value):
 	if value:
 		vpainter.current_tool = vpainter.PAINT
 		#print("TOOL = PAINT")
-		button_select.set_pressed(false)
 		button_blur.set_pressed(false)
 		button_fill.set_pressed(false)
-#	else:
-#		vpainter._set_paint_mode(false)
 
 func _set_blur_tool(value):
 	if value:
 		vpainter.current_tool = vpainter.BLUR
 		#print("TOOL = BLUR")
-		button_select.set_pressed(false)
 		button_paint.set_pressed(false)
 		button_fill.set_pressed(false)
-#	else:
-#		vpainter._set_paint_mode(false)
+
 
 func _set_fill_tool(value):
 	if value:
 		vpainter.current_tool = vpainter.FILL
 		#print("TOOL = FILL")
-		button_select.set_pressed(false)
 		button_paint.set_pressed(false)
 		button_blur.set_pressed(false)
 		button_fill.set_pressed(true)
-#	else:
-#		vpainter._set_paint_mode(false)
+
 
 func _set_brush_size(value):
 	vpainter.brush_size = value

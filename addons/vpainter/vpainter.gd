@@ -10,7 +10,7 @@ var paint_color:Color
 enum {MIX, ADD, SUBTRACT, MULTIPLY, DIVIDE}
 var blend_mode = MIX
 
-enum {SELECT, PAINT, BLUR, FILL}
+enum {PAINT, BLUR, FILL}
 var current_tool = PAINT
 
 var brush_size:float = 1
@@ -65,8 +65,6 @@ func forward_spatial_gui_input(camera, event):
 				FILL:
 					_fill_object()
 					return true
-				SELECT:
-					return false #ENABLE SELECTION
 		else:
 			process_drawing = false
 
