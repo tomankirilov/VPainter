@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon_select.svg-17cb08cce45572767bb565d26fde8d96.stex"
+path="res://.import/icon_blur.svg-efaddce4b372b27912e78e78049ea1ca.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/vpainter/res/icon_select.svg"
-dest_files=[ "res://.import/icon_select.svg-17cb08cce45572767bb565d26fde8d96.stex" ]
+source_file="res://addons/vpainter/res/icons/icon_blur.svg"
+dest_files=[ "res://.import/icon_blur.svg-efaddce4b372b27912e78e78049ea1ca.stex" ]
 
 [params]
 
@@ -31,4 +31,4 @@ process/invert_color=false
 stream=false
 size_limit=0
 detect_3d=true
-svg/scale=0.063
+svg/scale=1.0

@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/vertex_paint_meshes.glb-ffed2d00be6bcb89ee9a155636ca3af3.scn"
+path="res://.import/vertex_paint_meshes.glb-3200aacdc23c2348a306812fd0edfa07.scn"
 
 [deps]
 
-source_file="res://meshes/vertex_paint_meshes.glb"
-dest_files=[ "res://.import/vertex_paint_meshes.glb-ffed2d00be6bcb89ee9a155636ca3af3.scn" ]
+source_file="res://testing_assets/vertex_paint_meshes.glb"
+dest_files=[ "res://.import/vertex_paint_meshes.glb-3200aacdc23c2348a306812fd0edfa07.scn" ]
 
 [params]
 

@@ -1,15 +1,12 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/vpainter/vpainter_ui.gd" type="Script" id=1]
-[ext_resource path="res://addons/vpainter/res/icon_fill.svg" type="Texture" id=2]
-[ext_resource path="res://addons/vpainter/res/icon_blur.svg" type="Texture" id=3]
-[ext_resource path="res://addons/vpainter/res/icon_brush.svg" type="Texture" id=4]
-[ext_resource path="res://addons/vpainter/res/icon_select.svg" type="Texture" id=5]
-[ext_resource path="res://addons/vpainter/res/material_icons/icon_r.svg" type="Texture" id=6]
-[ext_resource path="res://addons/vpainter/res/material_icons/icon_g.svg" type="Texture" id=7]
-[ext_resource path="res://addons/vpainter/res/material_icons/icon_material.svg" type="Texture" id=8]
-[ext_resource path="res://addons/vpainter/res/material_icons/icon_b.svg" type="Texture" id=9]
-[ext_resource path="res://addons/vpainter/res/icon_duplicate.svg" type="Texture" id=10]
+[ext_resource path="res://addons/vpainter/res/icons/icon_fill.svg" type="Texture" id=2]
+[ext_resource path="res://addons/vpainter/res/icons/icon_blur.svg" type="Texture" id=3]
+[ext_resource path="res://addons/vpainter/res/icons/icon_brush.svg" type="Texture" id=4]
+[ext_resource path="res://addons/vpainter/res/icons/icon_select.svg" type="Texture" id=5]
+[ext_resource path="res://addons/vpainter/res/icons/icon_duplicate.svg" type="Texture" id=10]
+
 
 [node name="ui" type="Control"]
 anchor_right = 1.0
@@ -19,20 +16,20 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-local_copy_button_path = NodePath("ToolButton")
-color_picker_dir = NodePath("VBoxContainer/ColorSwatches/ColorPickerButton")
-background_picker_dir = NodePath("VBoxContainer/ColorSwatches/ColorPickerButton2")
-button_paint_dir = NodePath("VBoxContainer/Tools/BtnBrush")
-button_sample_dir = NodePath("VBoxContainer/Tools/BtnSample")
-button_blur_dir = NodePath("VBoxContainer/Tools/BtnBlur")
-button_fill_dir = NodePath("VBoxContainer/Tools/BtnFill")
-brush_size_slider_dir = NodePath("VBoxContainer/Sliders/Size")
-brush_opacity_slider_dir = NodePath("VBoxContainer/Sliders/Opacity")
-brush_hardness_slider_dir = NodePath("VBoxContainer/Sliders/Hardness")
-brush_spacing_slider_dir = NodePath("VBoxContainer/Sliders/Spacing")
-blend_modes_path = NodePath("VBoxContainer/OptionButton")
+local_copy_button_path = NodePath("DuplicateButton")
+color_picker_dir = NodePath("MainArea/ColorSwatches/ColorPickerButton")
+background_picker_dir = NodePath("MainArea/ColorSwatches/ColorPickerButton2")
+button_paint_dir = NodePath("MainArea/Tools/BtnBrush")
+button_sample_dir = NodePath("MainArea/Tools/BtnSample")
+button_blur_dir = NodePath("MainArea/Tools/BtnBlur")
+button_fill_dir = NodePath("MainArea/Tools/BtnFill")
+brush_size_slider_dir = NodePath("MainArea/Sliders/Size")
+brush_opacity_slider_dir = NodePath("MainArea/Sliders/Opacity")
+brush_hardness_slider_dir = NodePath("MainArea/Sliders/Hardness")
+brush_spacing_slider_dir = NodePath("MainArea/Sliders/Spacing")
+blend_modes_path = NodePath("MainArea/BlendModes")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MainArea" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 16.0
@@ -42,13 +39,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tools" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Tools" type="HBoxContainer" parent="MainArea"]
 margin_right = 192.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 0, 64 )
 alignment = 1
 
-[node name="BtnBrush" type="ToolButton" parent="VBoxContainer/Tools"]
+[node name="BtnBrush" type="ToolButton" parent="MainArea/Tools"]
 margin_left = 2.0
 margin_right = 46.0
 margin_bottom = 64.0
@@ -56,14 +53,14 @@ toggle_mode = true
 pressed = true
 icon = ExtResource( 4 )
 
-[node name="BtnSample" type="ToolButton" parent="VBoxContainer/Tools"]
+[node name="BtnSample" type="ToolButton" parent="MainArea/Tools"]
 margin_left = 50.0
 margin_right = 94.0
 margin_bottom = 64.0
 toggle_mode = true
 icon = ExtResource( 5 )
 
-[node name="BtnBlur" type="ToolButton" parent="VBoxContainer/Tools"]
+[node name="BtnBlur" type="ToolButton" parent="MainArea/Tools"]
 margin_left = 98.0
 margin_right = 142.0
 margin_bottom = 64.0
@@ -71,21 +68,21 @@ disabled = true
 toggle_mode = true
 icon = ExtResource( 3 )
 
-[node name="BtnFill" type="ToolButton" parent="VBoxContainer/Tools"]
+[node name="BtnFill" type="ToolButton" parent="MainArea/Tools"]
 margin_left = 146.0
 margin_right = 190.0
 margin_bottom = 64.0
 toggle_mode = true
 icon = ExtResource( 2 )
 
-[node name="ColorSwatches" type="HBoxContainer" parent="VBoxContainer"]
+[node name="ColorSwatches" type="HBoxContainer" parent="MainArea"]
 margin_top = 68.0
 margin_right = 192.0
 margin_bottom = 132.0
 rect_min_size = Vector2( 0, 64 )
 alignment = 1
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/ColorSwatches"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="MainArea/ColorSwatches"]
 margin_left = 46.0
 margin_top = 16.0
 margin_right = 94.0
@@ -94,7 +91,7 @@ rect_min_size = Vector2( 48, 32 )
 size_flags_vertical = 4
 flat = true
 
-[node name="ColorPickerButton2" type="ColorPickerButton" parent="VBoxContainer/ColorSwatches"]
+[node name="ColorPickerButton2" type="ColorPickerButton" parent="MainArea/ColorSwatches"]
 margin_left = 98.0
 margin_top = 16.0
 margin_right = 146.0
@@ -104,7 +101,7 @@ size_flags_vertical = 4
 flat = true
 color = Color( 1, 1, 1, 1 )
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+[node name="BlendModes" type="OptionButton" parent="MainArea"]
 margin_left = 32.0
 margin_top = 136.0
 margin_right = 160.0
@@ -116,7 +113,7 @@ text = "MIX"
 items = [ "MIX", null, false, 0, null, "ADD", null, false, 1, null, "SUBTRACT", null, false, 2, null, "MULTIPLY", null, false, 3, null, "DIVIDE", null, false, 4, null ]
 selected = 0
 
-[node name="Sliders" type="VBoxContainer" parent="VBoxContainer"]
+[node name="Sliders" type="VBoxContainer" parent="MainArea"]
 margin_left = 32.0
 margin_top = 160.0
 margin_right = 160.0
@@ -125,13 +122,13 @@ rect_min_size = Vector2( 128, 256 )
 size_flags_horizontal = 4
 alignment = 1
 
-[node name="LSize" type="Label" parent="VBoxContainer/Sliders"]
+[node name="LSize" type="Label" parent="MainArea/Sliders"]
 margin_top = 54.0
 margin_right = 128.0
 margin_bottom = 68.0
 text = "size:"
 
-[node name="Size" type="HSlider" parent="VBoxContainer/Sliders"]
+[node name="Size" type="HSlider" parent="MainArea/Sliders"]
 margin_top = 72.0
 margin_right = 128.0
 margin_bottom = 88.0
@@ -141,13 +138,13 @@ max_value = 10.0
 step = 0.001
 value = 1.0
 
-[node name="LSize2" type="Label" parent="VBoxContainer/Sliders"]
+[node name="LOpacity" type="Label" parent="MainArea/Sliders"]
 margin_top = 92.0
 margin_right = 128.0
 margin_bottom = 106.0
 text = "opacity:"
 
-[node name="Opacity" type="HSlider" parent="VBoxContainer/Sliders"]
+[node name="Opacity" type="HSlider" parent="MainArea/Sliders"]
 margin_top = 110.0
 margin_right = 128.0
 margin_bottom = 126.0
@@ -155,30 +152,29 @@ size_flags_horizontal = 3
 min_value = 0.001
 max_value = 1.0
 step = 0.001
-value = 1.0
+value = 0.5
 
-[node name="LSize3" type="Label" parent="VBoxContainer/Sliders"]
+[node name="LHardness" type="Label" parent="MainArea/Sliders"]
 margin_top = 130.0
 margin_right = 128.0
 margin_bottom = 144.0
 text = "hardness:"
 
-[node name="Hardness" type="HSlider" parent="VBoxContainer/Sliders"]
+[node name="Hardness" type="HSlider" parent="MainArea/Sliders"]
 margin_top = 148.0
 margin_right = 128.0
 margin_bottom = 164.0
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.001
-value = 1.0
 
-[node name="LSize4" type="Label" parent="VBoxContainer/Sliders"]
+[node name="LSpacing" type="Label" parent="MainArea/Sliders"]
 margin_top = 168.0
 margin_right = 128.0
 margin_bottom = 182.0
 text = "spacing:"
 
-[node name="Spacing" type="HSlider" parent="VBoxContainer/Sliders"]
+[node name="Spacing" type="HSlider" parent="MainArea/Sliders"]
 margin_top = 186.0
 margin_right = 128.0
 margin_bottom = 202.0
@@ -188,49 +184,7 @@ max_value = 1.0
 step = 0.01
 value = 0.1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-visible = false
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -28.0
-margin_right = -836.0
-custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="M" type="ToolButton" parent="HBoxContainer"]
-margin_right = 28.0
-margin_bottom = 28.0
-toggle_mode = true
-icon = ExtResource( 8 )
-
-[node name="R" type="ToolButton" parent="HBoxContainer"]
-visible = false
-margin_left = 28.0
-margin_right = 56.0
-margin_bottom = 28.0
-toggle_mode = true
-icon = ExtResource( 6 )
-
-[node name="G" type="ToolButton" parent="HBoxContainer"]
-visible = false
-margin_left = 28.0
-margin_right = 56.0
-margin_bottom = 28.0
-toggle_mode = true
-icon = ExtResource( 7 )
-
-[node name="B" type="ToolButton" parent="HBoxContainer"]
-visible = false
-margin_left = 28.0
-margin_right = 56.0
-margin_bottom = 28.0
-toggle_mode = true
-icon = ExtResource( 9 )
-
-[node name="ToolButton" type="ToolButton" parent="."]
+[node name="DuplicateButton" type="ToolButton" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 8.0

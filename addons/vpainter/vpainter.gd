@@ -3,6 +3,7 @@ extends EditorPlugin
 
 var ui_sidebar
 var ui_activate_button
+var brush_cursor
 
 var paint_mode:bool setget _set_paint_mode
 var paint_color:Color
@@ -14,18 +15,17 @@ enum {PAINT, BLUR, FILL, SAMPLE}
 var current_tool = PAINT
 
 var brush_size:float = 1
-var brush_opacity:float = 1.0
-var brush_hardness:float = 1.0
+var brush_opacity:float = 0.5
+var brush_hardness:float = 0.0
 var brush_spacing:float = 0.1
-
-var process_drawing = false
-var hit_position
-var hit_normal
 
 var current_mesh:MeshInstance
 var editable_object:bool = false
-var mouse_pressed:bool = false
-var mouse_moving:bool = false
+
+var process_drawing = false
+var raycast_hit:bool = false
+var hit_position
+var hit_normal
 
 func _selection_changed():
 	#AUTOMATICALLY CLOSE THE SIDEBAR ON SELECTION CHANGE:
@@ -52,10 +52,12 @@ func handles(obj):
 func forward_spatial_gui_input(camera, event):
 	if !paint_mode:
 		return
-
+	
 	if event is InputEventMouse:
 		_raycast(camera, event)
 
+	if raycast_hit:
+		brush_cursor.translation = hit_position
 
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.is_pressed(): 
@@ -76,7 +78,6 @@ func forward_spatial_gui_input(camera, event):
 		else:
 			process_drawing = false
 
-
 func _paint_object():
 	while process_drawing:
 		var data = MeshDataTool.new()
@@ -89,7 +90,7 @@ func _paint_object():
 			#TODO:
 				#brush hardness:
 				var vertex_proximity = vertex.distance_to(hit_position)/(brush_size/2)
-				var calculated_hardness = ((1 + brush_hardness) - vertex_proximity)
+				var calculated_hardness = ((1 + brush_hardness/2) - vertex_proximity)
 				
 				match blend_mode:
 					MIX:
@@ -180,8 +181,10 @@ func _raycast(camera:Camera, event:InputEvent):
 	var hit = space_state.intersect_ray(ray_origin, ray_origin + ray_dir * ray_distance, [] , 1)
 	#IF RAYCAST HITS A DRAWABLE SURFACE:
 	if!hit:
+		raycast_hit = false
 		return
 	if hit:
+		raycast_hit = true
 		hit_position = hit.position
 		hit_normal = hit.normal
 
@@ -202,9 +205,13 @@ func _enter_tree():
 	ui_activate_button.hide()
 	ui_activate_button.vpainter = self
 	ui_activate_button.ui_sidebar = ui_sidebar
-	#OTHER STUFF:
+	#SELECTION SIGNAL:
 	get_editor_interface().get_selection().connect("selection_changed", self, "_selection_changed")
-
+	#LOAD BRUSH:
+	brush_cursor = preload("res://addons/vpainter/res/brush_cursor/BrushCursor.tscn").instance()
+	brush_cursor.visible = false
+	add_child(brush_cursor)
+	
 func _exit_tree():
 	#REMOVE THE SIDEBAR:
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon_duplicate.svg-d12c24fa828d0272ca9831a31faea1c6.stex"
+path="res://.import/icon_select.svg-b9dad1efdeace1f01280e779cc0c851e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/vpainter/res/icon_duplicate.svg"
-dest_files=[ "res://.import/icon_duplicate.svg-d12c24fa828d0272ca9831a31faea1c6.stex" ]
+source_file="res://addons/vpainter/res/icons/icon_select.svg"
+dest_files=[ "res://.import/icon_select.svg-b9dad1efdeace1f01280e779cc0c851e.stex" ]
 
 [params]
 

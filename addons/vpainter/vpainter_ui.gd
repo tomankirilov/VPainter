@@ -144,6 +144,7 @@ func _set_fill_tool(value):
 
 func _set_brush_size(value):
 	vpainter.brush_size = value
+	vpainter.brush_cursor.scale = Vector3.ONE * value
 
 func _set_brush_opacity(value):
 	vpainter.brush_opacity = value
