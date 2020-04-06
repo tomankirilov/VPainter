@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://addons/vpainter/vpainter_ui.gd" type="Script" id=1]
 [ext_resource path="res://addons/vpainter/res/icon_fill.svg" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://addons/vpainter/res/material_icons/icon_g.svg" type="Texture" id=7]
 [ext_resource path="res://addons/vpainter/res/material_icons/icon_material.svg" type="Texture" id=8]
 [ext_resource path="res://addons/vpainter/res/material_icons/icon_b.svg" type="Texture" id=9]
+[ext_resource path="res://addons/vpainter/res/icon_duplicate.svg" type="Texture" id=10]
 
 [node name="ui" type="Control"]
 anchor_right = 1.0
@@ -18,9 +19,11 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-local_copy_button_path = NodePath("VBoxContainer/LocalCopy")
+local_copy_button_path = NodePath("ToolButton")
 color_picker_dir = NodePath("VBoxContainer/ColorSwatches/ColorPickerButton")
+background_picker_dir = NodePath("VBoxContainer/ColorSwatches/ColorPickerButton2")
 button_paint_dir = NodePath("VBoxContainer/Tools/BtnBrush")
+button_sample_dir = NodePath("VBoxContainer/Tools/BtnSample")
 button_blur_dir = NodePath("VBoxContainer/Tools/BtnBlur")
 button_fill_dir = NodePath("VBoxContainer/Tools/BtnFill")
 brush_size_slider_dir = NodePath("VBoxContainer/Sliders/Size")
@@ -39,55 +42,46 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LocalCopy" type="Button" parent="VBoxContainer"]
-margin_left = 30.0
-margin_right = 162.0
-margin_bottom = 20.0
-size_flags_horizontal = 4
-text = "MAKE LOCAL COPY"
-
 [node name="Tools" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 24.0
 margin_right = 192.0
-margin_bottom = 88.0
+margin_bottom = 64.0
 rect_min_size = Vector2( 0, 64 )
 alignment = 1
 
-[node name="BtnSelect" type="ToolButton" parent="VBoxContainer/Tools"]
-visible = false
+[node name="BtnBrush" type="ToolButton" parent="VBoxContainer/Tools"]
 margin_left = 2.0
 margin_right = 46.0
-margin_bottom = 40.0
-toggle_mode = true
-icon = ExtResource( 5 )
-
-[node name="BtnBrush" type="ToolButton" parent="VBoxContainer/Tools"]
-margin_left = 26.0
-margin_right = 70.0
 margin_bottom = 64.0
 toggle_mode = true
 pressed = true
 icon = ExtResource( 4 )
 
+[node name="BtnSample" type="ToolButton" parent="VBoxContainer/Tools"]
+margin_left = 50.0
+margin_right = 94.0
+margin_bottom = 64.0
+toggle_mode = true
+icon = ExtResource( 5 )
+
 [node name="BtnBlur" type="ToolButton" parent="VBoxContainer/Tools"]
-margin_left = 74.0
-margin_right = 118.0
+margin_left = 98.0
+margin_right = 142.0
 margin_bottom = 64.0
 disabled = true
 toggle_mode = true
 icon = ExtResource( 3 )
 
 [node name="BtnFill" type="ToolButton" parent="VBoxContainer/Tools"]
-margin_left = 122.0
-margin_right = 166.0
+margin_left = 146.0
+margin_right = 190.0
 margin_bottom = 64.0
 toggle_mode = true
 icon = ExtResource( 2 )
 
 [node name="ColorSwatches" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 92.0
+margin_top = 68.0
 margin_right = 192.0
-margin_bottom = 156.0
+margin_bottom = 132.0
 rect_min_size = Vector2( 0, 64 )
 alignment = 1
 
@@ -112,9 +106,9 @@ color = Color( 1, 1, 1, 1 )
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
 margin_left = 32.0
-margin_top = 160.0
+margin_top = 136.0
 margin_right = 160.0
-margin_bottom = 180.0
+margin_bottom = 156.0
 rect_min_size = Vector2( 128, 0 )
 hint_tooltip = "Blend mode for painting colors."
 size_flags_horizontal = 4
@@ -124,9 +118,9 @@ selected = 0
 
 [node name="Sliders" type="VBoxContainer" parent="VBoxContainer"]
 margin_left = 32.0
-margin_top = 184.0
+margin_top = 160.0
 margin_right = 160.0
-margin_bottom = 440.0
+margin_bottom = 416.0
 rect_min_size = Vector2( 128, 256 )
 size_flags_horizontal = 4
 alignment = 1
@@ -235,3 +229,15 @@ margin_right = 56.0
 margin_bottom = 28.0
 toggle_mode = true
 icon = ExtResource( 9 )
+
+[node name="ToolButton" type="ToolButton" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = -48.0
+margin_right = 52.0
+margin_bottom = -8.0
+icon = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

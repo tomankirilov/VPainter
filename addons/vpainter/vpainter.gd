@@ -10,7 +10,7 @@ var paint_color:Color
 enum {MIX, ADD, SUBTRACT, MULTIPLY, DIVIDE}
 var blend_mode = MIX
 
-enum {PAINT, BLUR, FILL}
+enum {PAINT, BLUR, FILL, SAMPLE}
 var current_tool = PAINT
 
 var brush_size:float = 1
@@ -23,27 +23,31 @@ var hit_position
 var hit_normal
 
 var current_mesh:MeshInstance
+var editable_object:bool = false
+var mouse_pressed:bool = false
+var mouse_moving:bool = false
 
-func handles(obj):
-	#GET SELECTION AND IF IT'S A MESH INSTANCE SET IT AS THE MESH TO PAINT ON:
-	if obj is MeshInstance:
-		#IF SELECTION IS DIFFERENT FROM LAST SELECTION:
-		if current_mesh != obj:
-			ui_activate_button._set_ui_sidebar(false)
-
-		current_mesh = obj
-
-		#IF SELECTION HAS NO MESH RESOURCE:
-		if (current_mesh.mesh == null):
+func _selection_changed():
+	#AUTOMATICALLY CLOSE THE SIDEBAR ON SELECTION CHANGE:
+	ui_activate_button._set_ui_sidebar(false)
+	
+	var selection = get_editor_interface().get_selection().get_selected_nodes()
+	if selection.size() == 1 and selection[0] is MeshInstance:
+		current_mesh = selection[0]
+		if current_mesh.mesh == null:
 			ui_activate_button._set_ui_sidebar(false)
 			ui_activate_button._hide()
-			return false
-
-		ui_activate_button._show()
-		return true
+			editable_object = false
+		else:
+			ui_activate_button._show()
+			editable_object = true
 	else:
+		editable_object = false
+		ui_activate_button._set_ui_sidebar(false) #HIDE THE SIDEBAR
 		ui_activate_button._hide()
-		return false
+
+func handles(obj):
+	return editable_object
 
 func forward_spatial_gui_input(camera, event):
 	if !paint_mode:
@@ -51,24 +55,29 @@ func forward_spatial_gui_input(camera, event):
 
 	if event is InputEventMouse:
 		_raycast(camera, event)
-		#print("event")
-	
+
+
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.is_pressed(): 
 			process_drawing = true
 			match current_tool:
 				PAINT:
-					_paint()
+					_paint_object()
 					return true
 				BLUR:
 					return true
 				FILL:
 					_fill_object()
 					return true
+				SAMPLE:
+					_sample_object()
+					return true
+
 		else:
 			process_drawing = false
 
-func _paint():
+
+func _paint_object():
 	while process_drawing:
 		var data = MeshDataTool.new()
 		data.create_from_surface(current_mesh.mesh, 0)
@@ -101,28 +110,45 @@ func _paint():
 func _fill_object():
 	var data = MeshDataTool.new()
 	data.create_from_surface(current_mesh.mesh, 0)
-
+	
 	for i in range(data.get_vertex_count()):
 		var vertex = data.get_vertex(i)
-		data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, brush_opacity))
+		
+		match blend_mode:
+			MIX:
+				data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, brush_opacity))
+			ADD:
+				data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) + paint_color, brush_opacity))
+			SUBTRACT:
+				data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) - paint_color, brush_opacity))
+			MULTIPLY:
+				data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) * paint_color, brush_opacity))
+			DIVIDE:
+				data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) / paint_color, brush_opacity))
 
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
 
-func _raycast(camera:Camera, event:InputEvent):
-	#RAYCAST FROM CAMERA:
-	var ray_origin = camera.project_ray_origin(event.position)
-	var ray_dir = camera.project_ray_normal(event.position)
-	var ray_distance = camera.far
+func _sample_object():
+	var data = MeshDataTool.new()
+	data.create_from_surface(current_mesh.mesh, 0)
+	
+	var closest_distance:float = INF
+	var closest_vertex_index:int
 
-	var space_state =  get_viewport().world.direct_space_state
-	var hit = space_state.intersect_ray(ray_origin, ray_origin + ray_dir * ray_distance, [] , 1)
-	#IF RAYCAST HITS A DRAWABLE SURFACE:
-	if!hit:
-		return
-	if hit:
-		hit_position = hit.position
-		hit_normal = hit.normal
+	for i in range(data.get_vertex_count()):
+		var vertex = data.get_vertex(i) + current_mesh.translation
+
+		if vertex.distance_to(hit_position) < closest_distance:
+			closest_distance = vertex.distance_to(hit_position)
+			closest_vertex_index = i
+	
+	var picked_color = data.get_vertex_color(closest_vertex_index)
+	paint_color = Color(picked_color.r, picked_color.g, picked_color.b, 1)
+	ui_sidebar._set_paint_color(paint_color)
+	
+	current_mesh.mesh.surface_remove(0)
+	data.commit_to_surface(current_mesh.mesh)
 
 func _set_paint_mode(value):
 	paint_mode = value
@@ -144,9 +170,23 @@ func _set_paint_mode(value):
 		if (temp_collision != null):
 			temp_collision.free()
 
+func _raycast(camera:Camera, event:InputEvent):
+	#RAYCAST FROM CAMERA:
+	var ray_origin = camera.project_ray_origin(event.position)
+	var ray_dir = camera.project_ray_normal(event.position)
+	var ray_distance = camera.far
+
+	var space_state =  get_viewport().world.direct_space_state
+	var hit = space_state.intersect_ray(ray_origin, ray_origin + ray_dir * ray_distance, [] , 1)
+	#IF RAYCAST HITS A DRAWABLE SURFACE:
+	if!hit:
+		return
+	if hit:
+		hit_position = hit.position
+		hit_normal = hit.normal
+
 #MAKE LOCAL COPY OF THE MESH:
 func _make_local_copy():
-	print("works?")
 	current_mesh.mesh = current_mesh.mesh.duplicate(false)
 
 #LOAD AND UNLOAD ADDON:
@@ -162,6 +202,8 @@ func _enter_tree():
 	ui_activate_button.hide()
 	ui_activate_button.vpainter = self
 	ui_activate_button.ui_sidebar = ui_sidebar
+	#OTHER STUFF:
+	get_editor_interface().get_selection().connect("selection_changed", self, "_selection_changed")
 
 func _exit_tree():
 	#REMOVE THE SIDEBAR:
