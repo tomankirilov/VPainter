@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="VPainter"
-config/icon="res://icon.png"
+config/icon="res://icon.svg"
 
 [editor_plugins]
 

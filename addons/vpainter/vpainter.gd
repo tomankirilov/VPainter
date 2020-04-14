@@ -84,7 +84,7 @@ func _paint_object():
 		data.create_from_surface(current_mesh.mesh, 0)
 	
 		for i in range(data.get_vertex_count()):
-			var vertex = data.get_vertex(i) + current_mesh.translation
+			var vertex = (data.get_vertex(i) * current_mesh.scale) + current_mesh.translation
 
 			if vertex.distance_to(hit_position) < brush_size/2:
 			#TODO:
