@@ -84,10 +84,10 @@ func _paint_object():
 		data.create_from_surface(current_mesh.mesh, 0)
 	
 		for i in range(data.get_vertex_count()):
-			var vertex = (data.get_vertex(i) * current_mesh.scale) + current_mesh.translation
-
+			var vertex = current_mesh.to_global(data.get_vertex(i))
+			
+			
 			if vertex.distance_to(hit_position) < brush_size/2:
-			#TODO:
 				#brush hardness:
 				var vertex_proximity = vertex.distance_to(hit_position)/(brush_size/2)
 				var calculated_hardness = ((1 + brush_hardness/2) - vertex_proximity)
