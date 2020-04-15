@@ -138,7 +138,7 @@ func _sample_object():
 	var closest_vertex_index:int
 
 	for i in range(data.get_vertex_count()):
-		var vertex = data.get_vertex(i) + current_mesh.translation
+		var vertex = current_mesh.to_global(data.get_vertex(i))
 
 		if vertex.distance_to(hit_position) < closest_distance:
 			closest_distance = vertex.distance_to(hit_position)

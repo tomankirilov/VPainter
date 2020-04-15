@@ -86,7 +86,6 @@ func _exit_tree():
 	pass
 
 func _make_local_copy():
-	print("Local copy made")
 	vpainter._make_local_copy()
 
 func _set_paint_color(value):
@@ -112,9 +111,34 @@ func _set_blend_mode(id):
 		4: #DIVIDE
 			vpainter.blend_mode = vpainter.DIVIDE
 
+
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		print(event.scancode)
+		
+		if event.scancode == KEY_1:
+			_set_paint_tool(true)
+		if event.scancode == KEY_2:
+			_set_sample_tool(true)
+#		if event.scancode == KEY_3:
+#			_set_blur_tool(true)
+		if event.scancode == KEY_4:
+			_set_fill_tool(true)
+		
+		if event.scancode == KEY_BRACELEFT:
+			_set_brush_size(brush_size_slider.value - 0.05)
+		if event.scancode == KEY_BRACERIGHT:
+			_set_brush_size(brush_size_slider.value + 0.05)
+		
+		if event.scancode == KEY_APOSTROPHE :
+			_set_brush_opacity(brush_opacity_slider.value - 0.01)
+		if event.scancode == KEY_BACKSLASH :
+			_set_brush_opacity(brush_opacity_slider.value + 0.01)
+
 func _set_paint_tool(value):
 	if value:
 		vpainter.current_tool = vpainter.PAINT
+		button_paint.set_pressed(true)
 		button_sample.set_pressed(false)
 		button_blur.set_pressed(false)
 		button_fill.set_pressed(false)
@@ -123,6 +147,7 @@ func _set_sample_tool(value):
 	if value:
 		vpainter.current_tool = vpainter.SAMPLE
 		button_paint.set_pressed(false)
+		button_sample.set_pressed(true)
 		button_blur.set_pressed(false)
 		button_fill.set_pressed(false)
 
@@ -131,6 +156,7 @@ func _set_blur_tool(value):
 		vpainter.current_tool = vpainter.BLUR
 		button_paint.set_pressed(false)
 		button_sample.set_pressed(false)
+		button_blur.set_pressed(true)
 		button_fill.set_pressed(false)
 
 
@@ -140,18 +166,23 @@ func _set_fill_tool(value):
 		button_paint.set_pressed(false)
 		button_sample.set_pressed(false)
 		button_blur.set_pressed(false)
+		button_fill.set_pressed(true)
 
 
 func _set_brush_size(value):
+	brush_size_slider.value = value
 	vpainter.brush_size = value
 	vpainter.brush_cursor.scale = Vector3.ONE * value
 
 func _set_brush_opacity(value):
+	brush_opacity_slider.value = value
 	vpainter.brush_opacity = value
 
 func _set_brush_hardness(value):
+	brush_hardness_slider.value = value
 	vpainter.brush_hardness = value
 
 func _set_brush_spacing(value):
+	brush_spacing_slider.value = value
 	vpainter.brush_spacing = value
 

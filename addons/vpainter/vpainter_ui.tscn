@@ -7,7 +7,6 @@
 [ext_resource path="res://addons/vpainter/res/icons/icon_select.svg" type="Texture" id=5]
 [ext_resource path="res://addons/vpainter/res/icons/icon_duplicate.svg" type="Texture" id=10]
 
-
 [node name="ui" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -49,6 +48,8 @@ alignment = 1
 margin_left = 2.0
 margin_right = 46.0
 margin_bottom = 64.0
+hint_tooltip = "[1] Brush Tool.
+Paint vertex color by left clicking on the mesh."
 toggle_mode = true
 pressed = true
 icon = ExtResource( 4 )
@@ -57,6 +58,8 @@ icon = ExtResource( 4 )
 margin_left = 50.0
 margin_right = 94.0
 margin_bottom = 64.0
+hint_tooltip = "[2] Sample Tool.
+Sample the vertex color under the mouse cursor when left clicked."
 toggle_mode = true
 icon = ExtResource( 5 )
 
@@ -72,6 +75,9 @@ icon = ExtResource( 3 )
 margin_left = 146.0
 margin_right = 190.0
 margin_bottom = 64.0
+hint_tooltip = "[4] Fill Tool.
+Fills the object with the currently selected color.
+Affected by blend modes and opacity."
 toggle_mode = true
 icon = ExtResource( 2 )
 
@@ -191,6 +197,8 @@ margin_left = 8.0
 margin_top = -48.0
 margin_right = 52.0
 margin_bottom = -8.0
+hint_tooltip = "Make local copy:
+Duplicates the original mesh and allows you to make changes without affecting the orginal mesh."
 icon = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
