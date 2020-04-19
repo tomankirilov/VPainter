@@ -50,6 +50,9 @@ In **VPainter/addons/vpainter/additional_resources/** you will find two shaders:
 **shader_vertex_color.shader** - is a simple shader that displays the vertex color. It has the possibility to isolate R, G and B channels so you can preview them individually.  
 **height_blend_4_textures.shader** - is a shader used in the first presentation. It is used for mixing 4 textures based on a heightmap and vertex color.     
 The shader uses 3 textures per material:  
-	* **M**: A mask texture. R channel contains the height information, G channel contains the rougness information and B channel contains the metal information.  
+	* **M**: A mask texture.  
+		R channel contains the height information  
+		G channel contains the rougness information  
+		B channel contains the metal information.  
 	* **C**: RGB color/albedo information.  
 	* **N**: Normalmap information.  
