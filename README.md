@@ -45,6 +45,7 @@ When clicked a new sidebar will appear with painting options.
 # **LIMITATIONS:**
 * Currently Vpainter does not support godot's primitive meshes. It only works with imported meshes.  
 * Currently only RGB painting is supported. Alpha channel painting is in the works.
+* Currently Vpainter does not support meshes with multiple instances of floating geometry.
 
 # **ADDITIONAL RESOURCES:**  
 In **VPainter/addons/vpainter/additional_resources/** you will find two shaders:  
