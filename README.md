@@ -3,7 +3,7 @@
 
 **DOWNLOAD AND INSTALL:**  
 Download the addon from https://github.com/tomankirilov/VPainter.
-Copy the addons folder in your project directory.
+Copy the addons folder in your project directory.  
 In **Project/Project Settings/Plugins** set VPainter to Active.
   
   
@@ -13,7 +13,7 @@ In **Project/Project Settings/Plugins** set VPainter to Active.
 **USING THE PLUGIN:**  
 
 
-In the 3d editor when a MeshInstance node with a valid mesh resource is selected an icon will appear in the top editor menu (1).
+In the 3d editor when a MeshInstance node with a valid mesh resource is selected an icon will appear in the top editor menu (1).  
 When clicked a new sidebar will appear with painting options(2).
 
 **FEATURES:**  
