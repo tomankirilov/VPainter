@@ -1,5 +1,7 @@
 ![](images/logo.png)
 # A vertex painting addon for the Godot game engine.
+
+[![](images/Thumbnail.png)](https://youtu.be/g87ov35zvjE)
   
   
 ![](images/preview.gif)
