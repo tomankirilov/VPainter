@@ -4,7 +4,7 @@
   
 ![](images/2.gif)
   
-**DOWNLOAD AND INSTALL:**  
+# **DOWNLOAD AND INSTALL:**  
 Download the addon from https://github.com/tomankirilov/VPainter.
 Copy the addons folder in your project directory.  
 In **Project/Project Settings/Plugins** set VPainter to Active.
