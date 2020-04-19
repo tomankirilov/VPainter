@@ -43,7 +43,8 @@ When clicked a new sidebar will appear with painting options.
 **make local copy** : makes a local copy of the mesh. It is useful if you don't want to overwrite your original mesh data.  
 
 # **LIMITATIONS:**
-Currently Vpainter does not support godot's primitive meshes. It only works with imported meshes.
+* Currently Vpainter does not support godot's primitive meshes. It only works with imported meshes.  
+* Currently only RGB painting is supported. Alpha channel painting is in the works.
 
 # **ADDITIONAL RESOURCES:**  
 In **VPainter/addons/vpainter/additional_resources/** you will find two shaders:  
