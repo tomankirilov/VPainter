@@ -114,8 +114,6 @@ func _set_blend_mode(id):
 
 func _input(event):
 	if event is InputEventKey and event.pressed:
-		print(event.scancode)
-		
 		if event.scancode == KEY_1:
 			_set_paint_tool(true)
 		if event.scancode == KEY_2:
