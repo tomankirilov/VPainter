@@ -29,11 +29,11 @@ When clicked a new sidebar will appear with painting options.
 **color swatches**: There are two color swatches. in the main panel. When clicked they reveal a color picker dialog. The last one clicked is the active one.  
 
 **blending modes**: There are currently 5 blending modes supported:  
- * MIX: linearly interpolated between the colors.  
- * ADD: adds the colors.  
- * SUBTRACT: subtracts the colors.  
- * MULTIPLY: multiplies the colors.  
- * DIVIDE: divides the colors.  
+ * **MIX**: linearly interpolated between the colors.  
+ * **ADD**: adds the colors.  
+ * **SUBTRACT**: subtracts the colors.  
+ * **MULTIPLY**: multiplies the colors.  
+ * **DIVIDE**: divides the colors.  
 
 **size**: controls the size of the brush and blur tool.  
 **opacity**: controls the opacity of the brush and fill tool.  
