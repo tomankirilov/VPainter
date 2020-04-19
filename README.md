@@ -16,7 +16,7 @@ In **Project/Project Settings/Plugins** set VPainter to Active.
 In the 3d editor when a MeshInstance node with a valid mesh resource is selected an icon will appear in the top editor menu (1).  
 When clicked a new sidebar will appear with painting options(2).
 
-**TOOLS:**
+**TOOLS:**  
 **brush tool** : (Shortcut - "1") use to paint vertex colors. You can adjust the size with the sliders or by using "[" and "]"
 **picker tool**: (Shortcut - "2") use to pick the vertex color
 **blur tool**  : (shortcut - "3") in progress
