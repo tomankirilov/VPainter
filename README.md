@@ -2,7 +2,7 @@
 # A vertex painting addon for the Godot game engine.
   
   
-![](images/2.gif)
+![](images/preview.gif)
   
 # **DOWNLOAD AND INSTALL:**  
 Download the addon from https://github.com/tomankirilov/VPainter.
