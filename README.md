@@ -10,7 +10,7 @@ Copy the addons folder in your project directory.
 In **Project/Project Settings/Plugins** set VPainter to Active.
   
   
-![](images/ProjectSettings.png)
+![](images/activate.gif)
   
   
 # **USING THE PLUGIN:**  
