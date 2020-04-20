@@ -62,3 +62,7 @@ The shader uses 3 textures per material:
 		B channel contains the metal information.  
 	* **C**: RGB color/albedo information.  
 	* **N**: Normalmap information.  
+# **SOURCES:**  
+* The height blend shader was made after this amazing post:
+http://untitledgam.es/2017/01/height-blending-shader/
+
