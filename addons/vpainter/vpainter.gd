@@ -25,7 +25,6 @@ var calculated_size:float = 0.0
 var brush_opacity:float = 0.5
 var calculated_opacity:float = 0.0
 
-
 var brush_hardness:float = 0.0
 var brush_spacing:float = 0.1
 var brush_pressure:float = 0.0
@@ -38,24 +37,6 @@ var raycast_hit:bool = false
 var hit_position
 var hit_normal
 
-func _selection_changed():
-	#AUTOMATICALLY CLOSE THE SIDEBAR ON SELECTION CHANGE:
-	ui_activate_button._set_ui_sidebar(false)
-	
-	var selection = get_editor_interface().get_selection().get_selected_nodes()
-	if selection.size() == 1 and selection[0] is MeshInstance:
-		current_mesh = selection[0]
-		if current_mesh.mesh == null:
-			ui_activate_button._set_ui_sidebar(false)
-			ui_activate_button._hide()
-			editable_object = false
-		else:
-			ui_activate_button._show()
-			editable_object = true
-	else:
-		editable_object = false
-		ui_activate_button._set_ui_sidebar(false) #HIDE THE SIDEBAR
-		ui_activate_button._hide()
 
 func handles(obj):
 	return editable_object
@@ -63,59 +44,52 @@ func handles(obj):
 func forward_spatial_gui_input(camera, event):
 	if !edit_mode:
 		return
-	
-	print("Update?")
-	
-	
-	if event is InputEventMouse:
-		_raycast(camera, event)
 
-	if event is InputEventMouseMotion:
-		
-		#Do the pen pressure pressure calculations:
-		if process_drawing:
-			brush_pressure = event.pressure
-			
-			if pressure_size:
-				calculated_size = brush_size * brush_pressure
-			else:
-				calculated_size = brush_size
-			
-			if pressure_opacity:
-				calculated_opacity = brush_opacity * brush_pressure
-			else:
-				calculated_opacity = brush_opacity
+	_raycast(camera, event)
+	_calculate_pen_pressure(event)
+	_display_brush()
+	_user_input(event)
 
+	return true
+
+func _user_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT and event.is_pressed(): 
+			process_drawing = true
+			match current_tool:
+				PAINT:
+					_paint_tool()
+				BLUR:
+					_blur_tool()
+				FILL:
+					_fill_tool()
+				SAMPLE:
+					_sample_tool()
+				DISPLACE:
+					_displace_tool()
+		else:
+			process_drawing = false
+
+func _display_brush():
 	if raycast_hit:
 		brush_cursor.translation = hit_position
 		brush_cursor.scale = Vector3.ONE * calculated_size
 
+func _calculate_pen_pressure(event):
+	if event is InputEventMouseMotion:
+		#Do the pen pressure pressure calculations:
+		if process_drawing:
+			brush_pressure = event.pressure
 
-	if event is InputEventMouseButton:
-		
-		if event.button_index == BUTTON_LEFT and event.is_pressed(): 
-			process_drawing = true
+			if pressure_size:
+				calculated_size = brush_size * brush_pressure
+			else:
+				calculated_size = brush_size
 
-			match current_tool:
-				PAINT:
-					_paint_tool()
-					return true
-				BLUR:
-					_blur_tool()
-					return true
-				FILL:
-					_fill_tool()
-					return true
-				SAMPLE:
-					_sample_tool()
-					return true
-				DISPLACE:
-					_displace_tool()
-					return true
-
-		else:
-			process_drawing = false
-
+			if pressure_opacity:
+				calculated_opacity = brush_opacity * brush_pressure
+			else:
+				calculated_opacity = brush_opacity
 
 func _raycast(camera:Camera, event:InputEvent):
 	#RAYCAST FROM CAMERA:
@@ -133,8 +107,6 @@ func _raycast(camera:Camera, event:InputEvent):
 		raycast_hit = true
 		hit_position = hit.position
 		hit_normal = hit.normal
-
-
 
 func _paint_tool():
 	while process_drawing:
@@ -252,7 +224,6 @@ func _sample_tool():
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
 
-
 func _set_collision(value:bool):
 	if value:
 		current_mesh.create_trimesh_collision()
@@ -284,6 +255,25 @@ func _set_edit_mode(value):
 #MAKE LOCAL COPY OF THE MESH:
 func _make_local_copy():
 	current_mesh.mesh = current_mesh.mesh.duplicate(false)
+
+#AUTOMATICALLY CLOSE THE SIDEBAR ON SELECTION CHANGE:
+func _selection_changed():
+	ui_activate_button._set_ui_sidebar(false)
+
+	var selection = get_editor_interface().get_selection().get_selected_nodes()
+	if selection.size() == 1 and selection[0] is MeshInstance:
+		current_mesh = selection[0]
+		if current_mesh.mesh == null:
+			ui_activate_button._set_ui_sidebar(false)
+			ui_activate_button._hide()
+			editable_object = false
+		else:
+			ui_activate_button._show()
+			editable_object = true
+	else:
+		editable_object = false
+		ui_activate_button._set_ui_sidebar(false) #HIDE THE SIDEBAR
+		ui_activate_button._hide()
 
 #LOAD AND UNLOAD ADDON:
 func _enter_tree():
