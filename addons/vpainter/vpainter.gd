@@ -5,7 +5,7 @@ var ui_sidebar
 var ui_activate_button
 var brush_cursor
 
-var paint_mode:bool setget _set_paint_mode
+var edit_mode:bool setget _set_edit_mode
 var paint_color:Color
 
 enum {MIX, ADD, SUBTRACT, MULTIPLY, DIVIDE}
@@ -61,10 +61,12 @@ func handles(obj):
 	return editable_object
 
 func forward_spatial_gui_input(camera, event):
-	if !paint_mode:
+	if !edit_mode:
 		return
 	
-
+	print("Update?")
+	
+	
 	if event is InputEventMouse:
 		_raycast(camera, event)
 
@@ -108,12 +110,31 @@ func forward_spatial_gui_input(camera, event):
 					_sample_tool()
 					return true
 				DISPLACE:
-					
 					_displace_tool()
 					return true
 
 		else:
 			process_drawing = false
+
+
+func _raycast(camera:Camera, event:InputEvent):
+	#RAYCAST FROM CAMERA:
+	var ray_origin = camera.project_ray_origin(event.position)
+	var ray_dir = camera.project_ray_normal(event.position)
+	var ray_distance = camera.far
+
+	var space_state =  get_viewport().world.direct_space_state
+	var hit = space_state.intersect_ray(ray_origin, ray_origin + ray_dir * ray_distance, [] , 524288 , true, false)
+	#IF RAYCAST HITS A DRAWABLE SURFACE:
+	if!hit:
+		raycast_hit = false
+		return
+	if hit:
+		raycast_hit = true
+		hit_position = hit.position
+		hit_normal = hit.normal
+
+
 
 func _paint_tool():
 	while process_drawing:
@@ -144,7 +165,6 @@ func _paint_tool():
 		current_mesh.mesh.surface_remove(0)
 		data.commit_to_surface(current_mesh.mesh)
 		yield(get_tree().create_timer(brush_spacing), "timeout")
-
 
 func _blur_tool():
 	while process_drawing:
@@ -189,7 +209,6 @@ func _displace_tool():
 		yield(get_tree().create_timer(brush_spacing), "timeout")
 	pass
 
-
 func _fill_tool():
 	var data = MeshDataTool.new()
 	data.create_from_surface(current_mesh.mesh, 0)
@@ -233,42 +252,34 @@ func _sample_tool():
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
 
-func _set_paint_mode(value):
-	paint_mode = value
+
+func _set_collision(value:bool):
+	if value:
+		current_mesh.create_trimesh_collision()
+		var temp_collision:StaticBody = current_mesh.get_node_or_null(current_mesh.name + "_col")
+		if (temp_collision != null):
+			temp_collision.set_collision_layer(524288)
+			temp_collision.set_collision_mask(524288)
+			
+			temp_collision.hide()
+	else:
+		var temp_collision = current_mesh.get_node_or_null(current_mesh.name + "_col")
+		if (temp_collision != null):
+			temp_collision.free()
+
+func _set_edit_mode(value):
+	edit_mode = value
 	#Generate temporary collision for vertex painting:
 	if !current_mesh:
 		return
 		if (!current_mesh.mesh):
 			return
 
-	if paint_mode:
-		current_mesh.create_trimesh_collision()
-		var temp_collision = current_mesh.get_node_or_null(current_mesh.name + "_col")
-		if (temp_collision != null):
-			temp_collision.hide()
+	if edit_mode:
+		_set_collision(true)
 	else:
 		ui_sidebar.hide()
-	#Delete the temporary collision:
-		var temp_collision = current_mesh.get_node_or_null(current_mesh.name + "_col")
-		if (temp_collision != null):
-			temp_collision.free()
-
-func _raycast(camera:Camera, event:InputEvent):
-	#RAYCAST FROM CAMERA:
-	var ray_origin = camera.project_ray_origin(event.position)
-	var ray_dir = camera.project_ray_normal(event.position)
-	var ray_distance = camera.far
-
-	var space_state =  get_viewport().world.direct_space_state
-	var hit = space_state.intersect_ray(ray_origin, ray_origin + ray_dir * ray_distance, [] , 1)
-	#IF RAYCAST HITS A DRAWABLE SURFACE:
-	if!hit:
-		raycast_hit = false
-		return
-	if hit:
-		raycast_hit = true
-		hit_position = hit.position
-		hit_normal = hit.normal
+		_set_collision(false)
 
 #MAKE LOCAL COPY OF THE MESH:
 func _make_local_copy():
