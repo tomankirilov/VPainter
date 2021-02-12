@@ -14,7 +14,13 @@ In **Project/Project Settings/Plugins** set VPainter to Active.
   
 ![](images/activate.gif)
   
-  
+ 
+# **CHANGE LOG:**
+**v0.2**: 
+* Added support for pressure sensitive pen tablets.
+* Some small bug fixes.
+ 
+ 
 # **USING THE PLUGIN:**  
 
 ![](images/show_hide.gif)  
@@ -29,6 +35,10 @@ When clicked a new sidebar will appear with painting options.
 **fill tool**  : (shortcut - "4") use to fill the entire mesh with a color. Fill tool is affected by the opacity and blend mode.    
 
 **color swatches**: There are two color swatches. in the main panel. When clicked they reveal a color picker dialog. The last one clicked is the active one.  
+
+**pressure sensitivity**: There is a new option for pressure sensitive pen tablets.
+* **SizePressure** - the size of your brush depends on the pressure input.
+* **OpacityPressure** - the opacity of your brush depends on the pressure input.
 
 **blending modes**: There are currently 5 blending modes supported:  
  * **MIX**: linearly interpolated between the colors.  
