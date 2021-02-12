@@ -18,6 +18,7 @@ var brush_size:float = 1
 var brush_opacity:float = 0.5
 var brush_hardness:float = 0.0
 var brush_spacing:float = 0.1
+var brush_pressure:float = 0.0
 
 var current_mesh:MeshInstance
 var editable_object:bool = false
@@ -56,12 +57,17 @@ func forward_spatial_gui_input(camera, event):
 	if event is InputEventMouse:
 		_raycast(camera, event)
 
+	if event is InputEventMouseMotion:
+		if process_drawing:
+			brush_pressure = event.pressure
+
 	if raycast_hit:
 		brush_cursor.translation = hit_position
 
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.is_pressed(): 
 			process_drawing = true
+
 			match current_tool:
 				PAINT:
 					_paint_object()
@@ -94,15 +100,15 @@ func _paint_object():
 				
 				match blend_mode:
 					MIX:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, brush_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, brush_opacity * brush_pressure * calculated_hardness))
 					ADD:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) + paint_color, brush_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) + paint_color, brush_opacity * brush_pressure * calculated_hardness))
 					SUBTRACT:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) - paint_color, brush_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) - paint_color, brush_opacity * brush_pressure * calculated_hardness))
 					MULTIPLY:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) * paint_color, brush_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) * paint_color, brush_opacity * brush_pressure * calculated_hardness))
 					DIVIDE:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) / paint_color, brush_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) / paint_color, brush_opacity * brush_pressure * calculated_hardness))
 
 		current_mesh.mesh.surface_remove(0)
 		data.commit_to_surface(current_mesh.mesh)
