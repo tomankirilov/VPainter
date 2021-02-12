@@ -11,7 +11,7 @@ var paint_color:Color
 enum {MIX, ADD, SUBTRACT, MULTIPLY, DIVIDE}
 var blend_mode = MIX
 
-enum {PAINT, BLUR, FILL, SAMPLE}
+enum {PAINT, BLUR, FILL, SAMPLE, DISPLACE}
 var current_tool = PAINT
 
 var pressure_opacity:bool = false
@@ -96,21 +96,26 @@ func forward_spatial_gui_input(camera, event):
 
 			match current_tool:
 				PAINT:
-					_paint_object()
+					_paint_tool()
 					return true
 				BLUR:
+					_blur_tool()
 					return true
 				FILL:
-					_fill_object()
+					_fill_tool()
 					return true
 				SAMPLE:
-					_sample_object()
+					_sample_tool()
+					return true
+				DISPLACE:
+					
+					_displace_tool()
 					return true
 
 		else:
 			process_drawing = false
 
-func _paint_object():
+func _paint_tool():
 	while process_drawing:
 		var data = MeshDataTool.new()
 		data.create_from_surface(current_mesh.mesh, 0)
@@ -141,7 +146,51 @@ func _paint_object():
 		yield(get_tree().create_timer(brush_spacing), "timeout")
 
 
-func _fill_object():
+func _blur_tool():
+	while process_drawing:
+		var data = MeshDataTool.new()
+		data.create_from_surface(current_mesh.mesh, 0)
+	
+		for i in range(data.get_vertex_count()):
+			var vertex = current_mesh.to_global(data.get_vertex(i))
+
+			if vertex.distance_to(hit_position) < calculated_size/2:
+				#brush hardness:
+				var vertex_proximity = vertex.distance_to(hit_position)/(calculated_size/2)
+				var calculated_hardness = ((1 + brush_hardness/2) - vertex_proximity)
+				
+
+				data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, calculated_opacity * calculated_hardness))
+
+		current_mesh.mesh.surface_remove(0)
+		data.commit_to_surface(current_mesh.mesh)
+		yield(get_tree().create_timer(brush_spacing), "timeout")
+
+func _displace_tool():
+	while process_drawing:
+		var data = MeshDataTool.new()
+		data.create_from_surface(current_mesh.mesh, 0)
+	
+		for i in range(data.get_vertex_count()):
+			var vertex = current_mesh.to_global(data.get_vertex(i))
+
+			if vertex.distance_to(hit_position) < calculated_size/2:
+				#brush hardness:
+				var vertex_proximity = vertex.distance_to(hit_position)/(calculated_size/2)
+				var calculated_hardness = ((1 + brush_hardness/2) - vertex_proximity)
+
+				data.set_vertex(i, data.get_vertex(i) + hit_normal * calculated_opacity * calculated_hardness)
+
+
+
+
+		current_mesh.mesh.surface_remove(0)
+		data.commit_to_surface(current_mesh.mesh)
+		yield(get_tree().create_timer(brush_spacing), "timeout")
+	pass
+
+
+func _fill_tool():
 	var data = MeshDataTool.new()
 	data.create_from_surface(current_mesh.mesh, 0)
 	
@@ -163,7 +212,7 @@ func _fill_object():
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
 
-func _sample_object():
+func _sample_tool():
 	var data = MeshDataTool.new()
 	data.create_from_surface(current_mesh.mesh, 0)
 	
