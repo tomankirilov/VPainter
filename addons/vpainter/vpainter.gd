@@ -49,8 +49,14 @@ func forward_spatial_gui_input(camera, event):
 	_calculate_pen_pressure(event)
 	_display_brush()
 	_user_input(event)
+	
+	return _handle_godot_ui(event)
 
-	return true
+func _handle_godot_ui(event) -> bool:
+	if event is InputEventMouseButton:
+		return true
+	else:
+		return false
 
 func _user_input(event):
 	if event is InputEventMouseButton:
@@ -252,11 +258,9 @@ func _set_edit_mode(value):
 		ui_sidebar.hide()
 		_set_collision(false)
 
-#MAKE LOCAL COPY OF THE MESH:
 func _make_local_copy():
 	current_mesh.mesh = current_mesh.mesh.duplicate(false)
 
-#AUTOMATICALLY CLOSE THE SIDEBAR ON SELECTION CHANGE:
 func _selection_changed():
 	ui_activate_button._set_ui_sidebar(false)
 
@@ -275,7 +279,6 @@ func _selection_changed():
 		ui_activate_button._set_ui_sidebar(false) #HIDE THE SIDEBAR
 		ui_activate_button._hide()
 
-#LOAD AND UNLOAD ADDON:
 func _enter_tree():
 	#SETUP THE SIDEBAR:
 	ui_sidebar = preload("res://addons/vpainter/vpainter_ui.tscn").instance()
@@ -294,7 +297,7 @@ func _enter_tree():
 	brush_cursor = preload("res://addons/vpainter/res/brush_cursor/BrushCursor.tscn").instance()
 	brush_cursor.visible = false
 	add_child(brush_cursor)
-	
+
 func _exit_tree():
 	#REMOVE THE SIDEBAR:
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)
