@@ -5,12 +5,11 @@ The shader is used to visualize the vertex colors of a given mesh.
 You can use "show_r", "show_g" and "show_b" to isolate specific channels for preview.
 ------------------------
 ------------------------*/
-
 shader_type spatial;
 
-uniform bool show_r;
-uniform bool show_g;
-uniform bool show_b;
+uniform bool show_r = true;
+uniform bool show_g = true;
+uniform bool show_b = true;
 
 varying vec4 col;
 
