@@ -13,6 +13,14 @@ var color_picker:ColorPickerButton
 export var background_picker_dir:NodePath
 var background_picker:ColorPickerButton
 
+#PEN PRESSURE:
+export var pen_pressure_settings_dir:NodePath
+var pen_pressure_settings:VBoxContainer
+export var button_opacity_pressure_dir:NodePath
+var button_opacity_pressure:CheckBox
+export var button_size_pressure_dir:NodePath
+var button_size_pressure:CheckBox
+
 #TOOLS:
 export var button_paint_dir:NodePath
 var button_paint:ToolButton
@@ -52,6 +60,14 @@ func _enter_tree():
 	
 	background_picker = get_node(background_picker_dir)
 	background_picker.connect("color_changed", self, "_set_background_color")
+	
+	
+	pen_pressure_settings = get_node(pen_pressure_settings_dir)
+	
+	button_opacity_pressure = get_node(button_opacity_pressure_dir)
+	button_opacity_pressure.connect("toggled", self, "_set_opacity_pressure")
+	button_size_pressure = get_node(button_size_pressure_dir)
+	button_size_pressure.connect("toggled", self, "_set_size_pressure")
 	
 	button_paint = get_node(button_paint_dir)
 	button_paint.connect("toggled", self, "_set_paint_tool")
@@ -133,9 +149,16 @@ func _input(event):
 		if event.scancode == KEY_BACKSLASH :
 			_set_brush_opacity(brush_opacity_slider.value + 0.01)
 
+func _set_opacity_pressure(value):
+	vpainter.pressure_opacity = value
+
+func _set_size_pressure(value):
+	vpainter.pressure_size = value
+
 func _set_paint_tool(value):
 	if value:
 		vpainter.current_tool = vpainter.PAINT
+		pen_pressure_settings.visible = true
 		button_paint.set_pressed(true)
 		button_sample.set_pressed(false)
 		button_blur.set_pressed(false)
@@ -144,6 +167,7 @@ func _set_paint_tool(value):
 func _set_sample_tool(value):
 	if value:
 		vpainter.current_tool = vpainter.SAMPLE
+		pen_pressure_settings.visible = false
 		button_paint.set_pressed(false)
 		button_sample.set_pressed(true)
 		button_blur.set_pressed(false)
@@ -152,6 +176,7 @@ func _set_sample_tool(value):
 func _set_blur_tool(value):
 	if value:
 		vpainter.current_tool = vpainter.BLUR
+		pen_pressure_settings.visible = false
 		button_paint.set_pressed(false)
 		button_sample.set_pressed(false)
 		button_blur.set_pressed(true)
@@ -161,6 +186,7 @@ func _set_blur_tool(value):
 func _set_fill_tool(value):
 	if value:
 		vpainter.current_tool = vpainter.FILL
+		pen_pressure_settings.visible = false
 		button_paint.set_pressed(false)
 		button_sample.set_pressed(false)
 		button_blur.set_pressed(false)

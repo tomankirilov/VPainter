@@ -14,6 +14,13 @@ var blend_mode = MIX
 enum {PAINT, BLUR, FILL, SAMPLE}
 var current_tool = PAINT
 
+var pressure_opacity:bool = false
+var pressure_size:bool = false
+var pen_pressure:float = 0.0
+var pen_moving:bool = false
+var calculated_opacity:float = 0.0
+var calculated_size:float = 0.0
+
 var brush_size:float = 1
 var brush_opacity:float = 0.5
 var brush_hardness:float = 0.0
@@ -54,6 +61,7 @@ func forward_spatial_gui_input(camera, event):
 	if !paint_mode:
 		return
 	
+
 	if event is InputEventMouse:
 		_raycast(camera, event)
 
@@ -64,7 +72,9 @@ func forward_spatial_gui_input(camera, event):
 	if raycast_hit:
 		brush_cursor.translation = hit_position
 
+
 	if event is InputEventMouseButton:
+		
 		if event.button_index == BUTTON_LEFT and event.is_pressed(): 
 			process_drawing = true
 
@@ -91,12 +101,12 @@ func _paint_object():
 	
 		for i in range(data.get_vertex_count()):
 			var vertex = current_mesh.to_global(data.get_vertex(i))
-			
-			
+
 			if vertex.distance_to(hit_position) < brush_size/2:
 				#brush hardness:
 				var vertex_proximity = vertex.distance_to(hit_position)/(brush_size/2)
 				var calculated_hardness = ((1 + brush_hardness/2) - vertex_proximity)
+				
 				
 				match blend_mode:
 					MIX:
@@ -113,6 +123,7 @@ func _paint_object():
 		current_mesh.mesh.surface_remove(0)
 		data.commit_to_surface(current_mesh.mesh)
 		yield(get_tree().create_timer(brush_spacing), "timeout")
+
 
 func _fill_object():
 	var data = MeshDataTool.new()
