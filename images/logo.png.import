@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon_blur.svg-efaddce4b372b27912e78e78049ea1ca.stex"
+path="res://.import/logo.png-1efe533e58f8c71cd5432a9ffe791e0e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/vpainter/res/icons/icon_blur.svg"
-dest_files=[ "res://.import/icon_blur.svg-efaddce4b372b27912e78e78049ea1ca.stex" ]
+source_file="res://images/logo.png"
+dest_files=[ "res://.import/logo.png-1efe533e58f8c71cd5432a9ffe791e0e.stex" ]
 
 [params]
 
