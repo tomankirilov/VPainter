@@ -38,12 +38,12 @@ var hit_position
 var hit_normal
 
 
-func handles(obj):
+func handles(obj) -> bool:
 	return editable_object
 
-func forward_spatial_gui_input(camera, event):
+func forward_spatial_gui_input(camera, event) -> bool:
 	if !edit_mode:
-		return
+		return true
 
 	_raycast(camera, event)
 	_calculate_pen_pressure(event)
@@ -58,7 +58,7 @@ func _handle_godot_ui(event) -> bool:
 	else:
 		return false
 
-func _user_input(event):
+func _user_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.is_pressed(): 
 			process_drawing = true
@@ -76,28 +76,26 @@ func _user_input(event):
 		else:
 			process_drawing = false
 
-func _display_brush():
+func _display_brush() -> void:
 	if raycast_hit:
 		brush_cursor.translation = hit_position
 		brush_cursor.scale = Vector3.ONE * calculated_size
 
 func _calculate_pen_pressure(event):
-	if event is InputEventMouseMotion:
-		#Do the pen pressure pressure calculations:
-		if process_drawing:
-			brush_pressure = event.pressure
+	if process_drawing:
+		brush_pressure = event.pressure
 
-			if pressure_size:
-				calculated_size = brush_size * brush_pressure
-			else:
-				calculated_size = brush_size
+		if pressure_size:
+			calculated_size = brush_size * brush_pressure
+		else:
+			calculated_size = brush_size
 
-			if pressure_opacity:
-				calculated_opacity = brush_opacity * brush_pressure
-			else:
-				calculated_opacity = brush_opacity
-
-func _raycast(camera:Camera, event:InputEvent):
+		if pressure_opacity:
+			calculated_opacity = brush_opacity * brush_pressure
+		else:
+			calculated_opacity = brush_opacity
+ 
+func _raycast(camera:Camera, event:InputEvent) -> void:
 	#RAYCAST FROM CAMERA:
 	var ray_origin = camera.project_ray_origin(event.position)
 	var ray_dir = camera.project_ray_normal(event.position)
@@ -114,7 +112,7 @@ func _raycast(camera:Camera, event:InputEvent):
 		hit_position = hit.position
 		hit_normal = hit.normal
 
-func _paint_tool():
+func _paint_tool() -> void:
 	while process_drawing:
 		var data = MeshDataTool.new()
 		data.create_from_surface(current_mesh.mesh, 0)
@@ -144,7 +142,7 @@ func _paint_tool():
 		data.commit_to_surface(current_mesh.mesh)
 		yield(get_tree().create_timer(brush_spacing), "timeout")
 
-func _blur_tool():
+func _blur_tool() -> void:
 	while process_drawing:
 		var data = MeshDataTool.new()
 		data.create_from_surface(current_mesh.mesh, 0)
@@ -164,7 +162,7 @@ func _blur_tool():
 		data.commit_to_surface(current_mesh.mesh)
 		yield(get_tree().create_timer(brush_spacing), "timeout")
 
-func _displace_tool():
+func _displace_tool() -> void:
 	while process_drawing:
 		var data = MeshDataTool.new()
 		data.create_from_surface(current_mesh.mesh, 0)
@@ -187,7 +185,7 @@ func _displace_tool():
 		yield(get_tree().create_timer(brush_spacing), "timeout")
 	pass
 
-func _fill_tool():
+func _fill_tool() -> void:
 	var data = MeshDataTool.new()
 	data.create_from_surface(current_mesh.mesh, 0)
 	
@@ -209,7 +207,7 @@ func _fill_tool():
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
 
-func _sample_tool():
+func _sample_tool() -> void:
 	var data = MeshDataTool.new()
 	data.create_from_surface(current_mesh.mesh, 0)
 	
@@ -230,7 +228,7 @@ func _sample_tool():
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
 
-func _set_collision(value:bool):
+func _set_collision(value:bool) -> void:
 	if value:
 		current_mesh.create_trimesh_collision()
 		var temp_collision:StaticBody = current_mesh.get_node_or_null(current_mesh.name + "_col")
@@ -244,7 +242,7 @@ func _set_collision(value:bool):
 		if (temp_collision != null):
 			temp_collision.free()
 
-func _set_edit_mode(value):
+func _set_edit_mode(value) -> void:
 	edit_mode = value
 	#Generate temporary collision for vertex painting:
 	if !current_mesh:
@@ -258,10 +256,10 @@ func _set_edit_mode(value):
 		ui_sidebar.hide()
 		_set_collision(false)
 
-func _make_local_copy():
+func _make_local_copy() -> void:
 	current_mesh.mesh = current_mesh.mesh.duplicate(false)
 
-func _selection_changed():
+func _selection_changed() -> void:
 	ui_activate_button._set_ui_sidebar(false)
 
 	var selection = get_editor_interface().get_selection().get_selected_nodes()
@@ -279,7 +277,7 @@ func _selection_changed():
 		ui_activate_button._set_ui_sidebar(false) #HIDE THE SIDEBAR
 		ui_activate_button._hide()
 
-func _enter_tree():
+func _enter_tree() -> void:
 	#SETUP THE SIDEBAR:
 	ui_sidebar = preload("res://addons/vpainter/vpainter_ui.tscn").instance()
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)
@@ -298,7 +296,7 @@ func _enter_tree():
 	brush_cursor.visible = false
 	add_child(brush_cursor)
 
-func _exit_tree():
+func _exit_tree() -> void:
 	#REMOVE THE SIDEBAR:
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)
 	if ui_sidebar:
