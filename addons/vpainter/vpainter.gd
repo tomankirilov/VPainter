@@ -1,6 +1,8 @@
 tool
 extends EditorPlugin
 
+var debug_show_collider:bool = true
+
 var ui_sidebar
 var ui_activate_button
 var brush_cursor
@@ -14,25 +16,25 @@ var blend_mode = MIX
 enum {PAINT, BLUR, FILL, SAMPLE, DISPLACE}
 var current_tool = PAINT
 
+var invert_brush = false
+
 var pressure_opacity:bool = false
 var pressure_size:bool = false
-var pen_pressure:float = 0.0
-var pen_moving:bool = false
+var brush_pressure:float = 0.0
+var process_drawing:bool = false
 
 var brush_size:float = 1
-var calculated_size:float = 0.0
+var calculated_size:float = 1.0
 
 var brush_opacity:float = 0.5
 var calculated_opacity:float = 0.0
 
 var brush_hardness:float = 0.0
 var brush_spacing:float = 0.1
-var brush_pressure:float = 0.0
 
 var current_mesh:MeshInstance
 var editable_object:bool = false
 
-var process_drawing = false
 var raycast_hit:bool = false
 var hit_position
 var hit_normal
@@ -41,52 +43,71 @@ var hit_normal
 func handles(obj) -> bool:
 	return editable_object
 
+
 func forward_spatial_gui_input(camera, event) -> bool:
 	if !edit_mode:
-		return true
-
-	_raycast(camera, event)
-	_calculate_pen_pressure(event)
-	_display_brush()
-	_user_input(event)
+		return false
 	
-	return _handle_godot_ui(event)
+	_calculate_brush_pressure(event)
+	_raycast(camera, event)
+	_display_brush()
 
-func _handle_godot_ui(event) -> bool:
-	if event is InputEventMouseButton:
+
+	if raycast_hit:
+		return _user_input(event) #the returned value blocks or unblocks the default input from godot
+	else:
 		return true
+
+
+func _user_input(event) -> bool:
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+		if event.is_pressed():
+#			print(current_mesh.mesh.)
+			process_drawing = true
+			_process_drawing()
+			return true
+		else:
+			process_drawing = false
+			_set_collision()
+			return false
+	if event is InputEventKey and event.scancode == KEY_CONTROL:
+		if event.is_pressed():
+			invert_brush = true
+			return false
+		else:
+			invert_brush = false
+			return false
 	else:
 		return false
 
-func _user_input(event) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and event.is_pressed(): 
-			process_drawing = true
-			match current_tool:
-				PAINT:
-					_paint_tool()
-				BLUR:
-					_blur_tool()
-				FILL:
-					_fill_tool()
-				SAMPLE:
-					_sample_tool()
-				DISPLACE:
-					_displace_tool()
-		else:
-			process_drawing = false
+func _process_drawing():
+	while process_drawing:
+		_match_tool()
+		yield(get_tree().create_timer(brush_spacing), "timeout")
+
+func _match_tool() -> void:
+	match current_tool:
+		PAINT:
+			_paint_tool()
+		BLUR:
+			_blur_tool()
+		FILL:
+			_fill_tool()
+		SAMPLE:
+			_sample_tool()
+		DISPLACE:
+			_displace_tool()
 
 func _display_brush() -> void:
 	if raycast_hit:
 		brush_cursor.translation = hit_position
 		brush_cursor.scale = Vector3.ONE * calculated_size
 
-func _calculate_pen_pressure(event):
-	if process_drawing:
+func _calculate_brush_pressure(event) -> void:
+	if event is InputEventMouseMotion:
 		brush_pressure = event.pressure
-
 		if pressure_size:
-			calculated_size = brush_size * brush_pressure
+			calculated_size = (brush_size * brush_pressure)/2
 		else:
 			calculated_size = brush_size
 
@@ -94,96 +115,72 @@ func _calculate_pen_pressure(event):
 			calculated_opacity = brush_opacity * brush_pressure
 		else:
 			calculated_opacity = brush_opacity
- 
-func _raycast(camera:Camera, event:InputEvent) -> void:
-	#RAYCAST FROM CAMERA:
-	var ray_origin = camera.project_ray_origin(event.position)
-	var ray_dir = camera.project_ray_normal(event.position)
-	var ray_distance = camera.far
 
-	var space_state =  get_viewport().world.direct_space_state
-	var hit = space_state.intersect_ray(ray_origin, ray_origin + ray_dir * ray_distance, [] , 524288 , true, false)
-	#IF RAYCAST HITS A DRAWABLE SURFACE:
-	if!hit:
-		raycast_hit = false
-		return
-	if hit:
-		raycast_hit = true
-		hit_position = hit.position
-		hit_normal = hit.normal
+func _raycast(camera:Camera, event:InputEvent) -> void:
+	if event is InputEventMouse:
+		#RAYCAST FROM CAMERA:
+		var ray_origin = camera.project_ray_origin(event.position)
+		var ray_dir = camera.project_ray_normal(event.position)
+		var ray_distance = camera.far
+
+		var space_state =  get_viewport().world.direct_space_state
+		var hit = space_state.intersect_ray(ray_origin, ray_origin + ray_dir * ray_distance, [] , 524288 , true, false)
+		#IF RAYCAST HITS A DRAWABLE SURFACE:
+		if!hit:
+			raycast_hit = false
+			return
+		if hit:
+			raycast_hit = true
+			hit_position = hit.position
+			hit_normal = hit.normal
 
 func _paint_tool() -> void:
-	while process_drawing:
 		var data = MeshDataTool.new()
 		data.create_from_surface(current_mesh.mesh, 0)
-	
+
 		for i in range(data.get_vertex_count()):
 			var vertex = current_mesh.to_global(data.get_vertex(i))
-
 			if vertex.distance_to(hit_position) < calculated_size/2:
-				#brush hardness:
-				var vertex_proximity = vertex.distance_to(hit_position)/(calculated_size/2)
-				var calculated_hardness = ((1 + brush_hardness/2) - vertex_proximity)
-				
-				
+
 				match blend_mode:
 					MIX:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, calculated_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, calculated_opacity))
 					ADD:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) + paint_color, calculated_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) + paint_color, calculated_opacity))
 					SUBTRACT:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) - paint_color, calculated_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) - paint_color, calculated_opacity))
 					MULTIPLY:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) * paint_color, calculated_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) * paint_color, calculated_opacity))
 					DIVIDE:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) / paint_color,calculated_opacity * calculated_hardness))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) / paint_color, calculated_opacity))
 
 		current_mesh.mesh.surface_remove(0)
 		data.commit_to_surface(current_mesh.mesh)
-		yield(get_tree().create_timer(brush_spacing), "timeout")
 
 func _blur_tool() -> void:
-	while process_drawing:
-		var data = MeshDataTool.new()
-		data.create_from_surface(current_mesh.mesh, 0)
-	
-		for i in range(data.get_vertex_count()):
-			var vertex = current_mesh.to_global(data.get_vertex(i))
-
-			if vertex.distance_to(hit_position) < calculated_size/2:
-				#brush hardness:
-				var vertex_proximity = vertex.distance_to(hit_position)/(calculated_size/2)
-				var calculated_hardness = ((1 + brush_hardness/2) - vertex_proximity)
-				
-
-				data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, calculated_opacity * calculated_hardness))
-
-		current_mesh.mesh.surface_remove(0)
-		data.commit_to_surface(current_mesh.mesh)
-		yield(get_tree().create_timer(brush_spacing), "timeout")
+	pass
 
 func _displace_tool() -> void:
-	while process_drawing:
-		var data = MeshDataTool.new()
-		data.create_from_surface(current_mesh.mesh, 0)
-	
-		for i in range(data.get_vertex_count()):
-			var vertex = current_mesh.to_global(data.get_vertex(i))
+	var data = MeshDataTool.new()
+	data.create_from_surface(current_mesh.mesh, 0)
 
-			if vertex.distance_to(hit_position) < calculated_size/2:
-				#brush hardness:
-				var vertex_proximity = vertex.distance_to(hit_position)/(calculated_size/2)
-				var calculated_hardness = ((1 + brush_hardness/2) - vertex_proximity)
+	for i in range(data.get_vertex_count()):
+		var vertex = current_mesh.to_global(data.get_vertex(i))
 
+		if vertex.distance_to(hit_position) < calculated_size:
+			#brush hardness:
+			var vertex_proximity = vertex.distance_to(hit_position)/(calculated_size)
+			var calculated_hardness = ((1 + brush_hardness) - vertex_proximity)
+
+			if !invert_brush:
 				data.set_vertex(i, data.get_vertex(i) + hit_normal * calculated_opacity * calculated_hardness)
+			else:
+				data.set_vertex(i, data.get_vertex(i) - hit_normal * calculated_opacity * calculated_hardness)
 
 
 
-
-		current_mesh.mesh.surface_remove(0)
-		data.commit_to_surface(current_mesh.mesh)
-		yield(get_tree().create_timer(brush_spacing), "timeout")
-	pass
+	current_mesh.mesh.surface_remove(0)
+	data.commit_to_surface(current_mesh.mesh)
 
 func _fill_tool() -> void:
 	var data = MeshDataTool.new()
@@ -206,6 +203,7 @@ func _fill_tool() -> void:
 
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
+	process_drawing = false
 
 func _sample_tool() -> void:
 	var data = MeshDataTool.new()
@@ -228,33 +226,40 @@ func _sample_tool() -> void:
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
 
-func _set_collision(value:bool) -> void:
-	if value:
+func _set_collision() -> void:
+	var temp_collision:StaticBody = current_mesh.get_node_or_null(current_mesh.name + "_col")
+	if (temp_collision == null):
 		current_mesh.create_trimesh_collision()
-		var temp_collision:StaticBody = current_mesh.get_node_or_null(current_mesh.name + "_col")
-		if (temp_collision != null):
-			temp_collision.set_collision_layer(524288)
-			temp_collision.set_collision_mask(524288)
-			
-			temp_collision.hide()
+		temp_collision = current_mesh.get_node(current_mesh.name + "_col")
+		temp_collision.set_collision_layer(524288)
+		temp_collision.set_collision_mask(524288)
 	else:
-		var temp_collision = current_mesh.get_node_or_null(current_mesh.name + "_col")
-		if (temp_collision != null):
-			temp_collision.free()
+		temp_collision.free()
+		current_mesh.create_trimesh_collision()
+		temp_collision = current_mesh.get_node(current_mesh.name + "_col")
+		temp_collision.set_collision_layer(524288)
+		temp_collision.set_collision_mask(524288)
+	
+	if !debug_show_collider:
+		temp_collision.hide()
+
+func _delete_collision() -> void:
+	var temp_collision:StaticBody = current_mesh.get_node_or_null(current_mesh.name + "_col")
+	if (temp_collision != null):
+		temp_collision.free()
 
 func _set_edit_mode(value) -> void:
 	edit_mode = value
-	#Generate temporary collision for vertex painting:
 	if !current_mesh:
 		return
 		if (!current_mesh.mesh):
 			return
 
 	if edit_mode:
-		_set_collision(true)
+		_set_collision()
 	else:
 		ui_sidebar.hide()
-		_set_collision(false)
+		_delete_collision()
 
 func _make_local_copy() -> void:
 	current_mesh.mesh = current_mesh.mesh.duplicate(false)
