@@ -1,7 +1,7 @@
 tool
 extends EditorPlugin
 
-var debug_show_collider:bool = true
+var debug_show_collider:bool = false
 
 var ui_sidebar
 var ui_activate_button
@@ -13,10 +13,14 @@ var paint_color:Color
 enum {MIX, ADD, SUBTRACT, MULTIPLY, DIVIDE}
 var blend_mode = MIX
 
+enum {STANDART, INFLATE, MOVE, SMOOTH}
+var sculpt_mode = STANDART
+
 enum {PAINT, BLUR, FILL, SAMPLE, DISPLACE}
 var current_tool = PAINT
 
 var invert_brush = false
+
 
 var pressure_opacity:bool = false
 var pressure_size:bool = false
@@ -29,7 +33,7 @@ var calculated_size:float = 1.0
 var brush_opacity:float = 0.5
 var calculated_opacity:float = 0.0
 
-var brush_hardness:float = 0.0
+var brush_hardness:float = 0.5
 var brush_spacing:float = 0.1
 
 var current_mesh:MeshInstance
@@ -47,10 +51,10 @@ func handles(obj) -> bool:
 func forward_spatial_gui_input(camera, event) -> bool:
 	if !edit_mode:
 		return false
-	
+
+	_display_brush()
 	_calculate_brush_pressure(event)
 	_raycast(camera, event)
-	_display_brush()
 
 
 	if raycast_hit:
@@ -70,6 +74,7 @@ func _user_input(event) -> bool:
 			process_drawing = false
 			_set_collision()
 			return false
+
 	if event is InputEventKey and event.scancode == KEY_CONTROL:
 		if event.is_pressed():
 			invert_brush = true
@@ -99,7 +104,7 @@ func _match_tool() -> void:
 			_displace_tool()
 
 func _display_brush() -> void:
-	if raycast_hit:
+#	if raycast_hit:
 		brush_cursor.translation = hit_position
 		brush_cursor.scale = Vector3.ONE * calculated_size
 
@@ -139,12 +144,16 @@ func _paint_tool() -> void:
 		data.create_from_surface(current_mesh.mesh, 0)
 
 		for i in range(data.get_vertex_count()):
-			var vertex = current_mesh.to_global(data.get_vertex(i))
-			if vertex.distance_to(hit_position) < calculated_size/2:
+			var vertex := current_mesh.to_global(data.get_vertex(i))
+			var vertex_distance:float = vertex.distance_to(hit_position)
+
+			if vertex_distance < calculated_size/2:
+				var linear_distance = 1 - (vertex_distance / (calculated_size/2))
+				var calculated_hardness = linear_distance * brush_hardness
 
 				match blend_mode:
 					MIX:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, calculated_opacity))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, calculated_opacity * calculated_hardness))
 					ADD:
 						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) + paint_color, calculated_opacity))
 					SUBTRACT:
@@ -157,30 +166,28 @@ func _paint_tool() -> void:
 		current_mesh.mesh.surface_remove(0)
 		data.commit_to_surface(current_mesh.mesh)
 
+func _displace_tool() -> void:
+		var data = MeshDataTool.new()
+		data.create_from_surface(current_mesh.mesh, 0)
+
+		for i in range(data.get_vertex_count()):
+			var vertex := current_mesh.to_global(data.get_vertex(i))
+			var vertex_distance:float = vertex.distance_to(hit_position)
+
+			if vertex_distance < calculated_size/2:
+				var linear_distance = 1 - (vertex_distance / (calculated_size/2))
+				var calculated_hardness = linear_distance * brush_hardness
+
+				if !invert_brush:
+					data.set_vertex(i, data.get_vertex(i) + hit_normal * calculated_opacity * calculated_hardness)
+				else:
+					data.set_vertex(i, data.get_vertex(i) - hit_normal * calculated_opacity * calculated_hardness)
+
+		current_mesh.mesh.surface_remove(0)
+		data.commit_to_surface(current_mesh.mesh)
+
 func _blur_tool() -> void:
 	pass
-
-func _displace_tool() -> void:
-	var data = MeshDataTool.new()
-	data.create_from_surface(current_mesh.mesh, 0)
-
-	for i in range(data.get_vertex_count()):
-		var vertex = current_mesh.to_global(data.get_vertex(i))
-
-		if vertex.distance_to(hit_position) < calculated_size:
-			#brush hardness:
-			var vertex_proximity = vertex.distance_to(hit_position)/(calculated_size)
-			var calculated_hardness = ((1 + brush_hardness) - vertex_proximity)
-
-			if !invert_brush:
-				data.set_vertex(i, data.get_vertex(i) + hit_normal * calculated_opacity * calculated_hardness)
-			else:
-				data.set_vertex(i, data.get_vertex(i) - hit_normal * calculated_opacity * calculated_hardness)
-
-
-
-	current_mesh.mesh.surface_remove(0)
-	data.commit_to_surface(current_mesh.mesh)
 
 func _fill_tool() -> void:
 	var data = MeshDataTool.new()
