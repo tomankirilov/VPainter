@@ -168,8 +168,7 @@ func _set_size_pressure(value):
 
 func _set_paint_tool(value):
 	if value:
-		print("PAINT TOOL ACTICATED")
-		vpainter.current_tool = vpainter.PAINT
+		vpainter.current_tool = "_paint_tool"
 		pen_pressure_settings.visible = true
 		blend_modes.visible = true
 
@@ -181,8 +180,7 @@ func _set_paint_tool(value):
 
 func _set_sample_tool(value):
 	if value:
-		print("SAMPLE TOOL ACTICATED")
-		vpainter.current_tool = vpainter.SAMPLE
+		vpainter.current_tool = "_sample_tool"
 		pen_pressure_settings.visible = false
 		blend_modes.visible = false
 		
@@ -194,8 +192,7 @@ func _set_sample_tool(value):
 
 func _set_blur_tool(value):
 	if value:
-		print("BLUR TOOL ACTICATED")
-		vpainter.current_tool = vpainter.BLUR
+		vpainter.current_tool = "_blur_tool"
 		pen_pressure_settings.visible = false
 		blend_modes.visible = false
 		
@@ -207,8 +204,7 @@ func _set_blur_tool(value):
 
 func _set_displace_tool(value):
 	if value:
-		print("DISPLACE TOOL ACTICATED")
-		vpainter.current_tool = vpainter.DISPLACE
+		vpainter.current_tool = "_displace_tool"
 		pen_pressure_settings.visible = true
 		blend_modes.visible = false
 		
@@ -221,8 +217,7 @@ func _set_displace_tool(value):
 
 func _set_fill_tool(value):
 	if value:
-		print("FILL TOOL ACTICATED")
-		vpainter.current_tool = vpainter.FILL
+		vpainter.current_tool = "_fill_tool"
 		pen_pressure_settings.visible = false
 		blend_modes.visible = true
 

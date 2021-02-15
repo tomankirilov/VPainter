@@ -16,8 +16,8 @@ var blend_mode = MIX
 enum {STANDART, INFLATE, MOVE, SMOOTH}
 var sculpt_mode = STANDART
 
-enum {PAINT, BLUR, FILL, SAMPLE, DISPLACE}
-var current_tool = PAINT
+var current_tool = "_paint_tool"
+
 
 var invert_brush = false
 
@@ -60,8 +60,7 @@ func forward_spatial_gui_input(camera, event) -> bool:
 	if raycast_hit:
 		return _user_input(event) #the returned value blocks or unblocks the default input from godot
 	else:
-		return true
-
+		return false
 
 func _user_input(event) -> bool:
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
@@ -87,26 +86,16 @@ func _user_input(event) -> bool:
 
 func _process_drawing():
 	while process_drawing:
-		_match_tool()
+		call(current_tool)
 		yield(get_tree().create_timer(brush_spacing), "timeout")
 
-func _match_tool() -> void:
-	match current_tool:
-		PAINT:
-			_paint_tool()
-		BLUR:
-			_blur_tool()
-		FILL:
-			_fill_tool()
-		SAMPLE:
-			_sample_tool()
-		DISPLACE:
-			_displace_tool()
-
 func _display_brush() -> void:
-#	if raycast_hit:
+	if raycast_hit:
+		brush_cursor.visible = true
 		brush_cursor.translation = hit_position
 		brush_cursor.scale = Vector3.ONE * calculated_size
+	else:
+		brush_cursor.visible = false
 
 func _calculate_brush_pressure(event) -> void:
 	if event is InputEventMouseMotion:
@@ -155,13 +144,13 @@ func _paint_tool() -> void:
 					MIX:
 						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(paint_color, calculated_opacity * calculated_hardness))
 					ADD:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) + paint_color, calculated_opacity))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) + paint_color, calculated_opacity * calculated_hardness))
 					SUBTRACT:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) - paint_color, calculated_opacity))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) - paint_color, calculated_opacity * calculated_hardness))
 					MULTIPLY:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) * paint_color, calculated_opacity))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) * paint_color, calculated_opacity * calculated_hardness))
 					DIVIDE:
-						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) / paint_color, calculated_opacity))
+						data.set_vertex_color(i, data.get_vertex_color(i).linear_interpolate(data.get_vertex_color(i) / paint_color, calculated_opacity * calculated_hardness))
 
 		current_mesh.mesh.surface_remove(0)
 		data.commit_to_surface(current_mesh.mesh)
