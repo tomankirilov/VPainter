@@ -29,11 +29,11 @@ func _hide():
 func _set_ui_sidebar(value):
 	if value:
 		ui_sidebar.set_process_input(true)
-		vpainter._set_paint_mode(true)
+		vpainter._set_edit_mode(true)
 		ui_sidebar.show()
 		vpainter.brush_cursor.visible = true
 	else:
 		ui_sidebar.set_process_input(false)
 		ui_sidebar.hide()
-		vpainter._set_paint_mode(false)
+		vpainter._set_edit_mode(false)
 		vpainter.brush_cursor.visible = false
