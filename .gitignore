@@ -6,3 +6,16 @@ icon.png
 icon.svg
 project.godot
 
+*.obj
+example/Textures/TEX_Ground_Dust_C.png
+example/Textures/TEX_Ground_Dust_M.png
+example/Textures/TEX_Ground_Dust_N.png
+example/Textures/TEX_Ground_Rubble_C.png
+example/Textures/TEX_Ground_Rubble_M.png
+example/Textures/TEX_Ground_Rubble_N.png
+example/Textures/TEX_Ground_Tiles_C.png
+example/Textures/TEX_Ground_Tiles_Damaged_C.png
+example/Textures/TEX_Ground_Tiles_Damaged_M.png
+example/Textures/TEX_Ground_Tiles_Damaged_N.png
+example/Textures/TEX_Ground_Tiles_M.png
+example/Textures/TEX_Ground_Tiles_N.png
