@@ -1,4 +1,5 @@
 testing/**
+example/**
 .import/**
 *.import
 default_env.tres
@@ -19,3 +20,4 @@ example/Textures/TEX_Ground_Tiles_Damaged_M.png
 example/Textures/TEX_Ground_Tiles_Damaged_N.png
 example/Textures/TEX_Ground_Tiles_M.png
 example/Textures/TEX_Ground_Tiles_N.png
+
