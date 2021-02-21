@@ -4,4 +4,4 @@
 flags_unshaded = true
 flags_do_not_receive_shadows = true
 params_blend_mode = 1
-albedo_color = Color( 0.431373, 0.431373, 0.431373, 1 )
+albedo_color = Color( 0.196078, 0.196078, 0.196078, 1 )
