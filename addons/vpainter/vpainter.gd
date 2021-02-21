@@ -57,15 +57,15 @@ func forward_spatial_gui_input(camera, event) -> bool:
 	_raycast(camera, event)
 
 
-	if raycast_hit:
-		return _user_input(event) #the returned value blocks or unblocks the default input from godot
-	else:
-		return false
+
+	return _user_input(event) #the returned value blocks or unblocks the default input from godot
+
 
 func _user_input(event) -> bool:
+	
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		if event.is_pressed():
-#			print(current_mesh.mesh.)
+			_store_data()
 			process_drawing = true
 			_process_drawing()
 			return true
@@ -73,6 +73,10 @@ func _user_input(event) -> bool:
 			process_drawing = false
 			_set_collision()
 			return false
+	
+	if event is InputEventKey and event.scancode == KEY_Z:
+		_restore_data()
+		return true
 
 	if event is InputEventKey and event.scancode == KEY_CONTROL:
 		if event.is_pressed():
@@ -84,10 +88,40 @@ func _user_input(event) -> bool:
 	else:
 		return false
 
+
+var undo_data_color:Array
+var undo_data_pos:Array
+
+func _store_data():
+	var data = MeshDataTool.new()
+	data.create_from_surface(current_mesh.mesh, 0)
+	
+	undo_data_color.clear()
+	undo_data_pos.clear()
+
+	for i in range(data.get_vertex_count()):
+		undo_data_color.append(data.get_vertex_color(i))
+		undo_data_pos.append(data.get_vertex(i))
+	
+	
+
+func _restore_data():
+	var data = MeshDataTool.new()
+	data.create_from_surface(current_mesh.mesh, 0)
+
+	for i in range(data.get_vertex_count()):
+		data.set_vertex_color(i, undo_data_color[i])
+		data.set_vertex(i, undo_data_pos[i])
+
+	current_mesh.mesh.surface_remove(0)
+	data.commit_to_surface(current_mesh.mesh)
+
+
 func _process_drawing():
 	while process_drawing:
 		call(current_tool)
 		yield(get_tree().create_timer(brush_spacing), "timeout")
+
 
 func _display_brush() -> void:
 	if raycast_hit:
