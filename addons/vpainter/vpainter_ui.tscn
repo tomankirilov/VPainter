@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/vpainter/vpainter_ui.gd" type="Script" id=1]
 [ext_resource path="res://addons/vpainter/res/icons/icon_fill.svg" type="Texture" id=2]
@@ -6,20 +6,23 @@
 [ext_resource path="res://addons/vpainter/res/icons/icon_brush.svg" type="Texture" id=4]
 [ext_resource path="res://addons/vpainter/res/icons/icon_pick.svg" type="Texture" id=5]
 [ext_resource path="res://addons/vpainter/res/icons/icon_displace.svg" type="Texture" id=6]
+[ext_resource path="res://addons/vpainter/res/icons/icon_redo.svg" type="Texture" id=7]
+[ext_resource path="res://addons/vpainter/res/icons/icon_undo.svg" type="Texture" id=8]
 [ext_resource path="res://addons/vpainter/res/icons/icon_duplicate.svg" type="Texture" id=10]
 
 [node name="ui" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -832.0
 rect_min_size = Vector2( 192, 0 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-local_copy_button_path = NodePath("DuplicateButton")
-color_picker_dir = NodePath("MainArea/ColorSwatches/ColorPickerButton")
-background_picker_dir = NodePath("MainArea/ColorSwatches/ColorPickerButton2")
+local_copy_button_path = NodePath("BottomBar/DuplicateButton")
+undo_button_path = NodePath("BottomBar/UndoRedo/UndoButton")
+redo_button_path = NodePath("BottomBar/UndoRedo/RedoButton")
+foreground_picker_dir = NodePath("MainArea/ColorSwatches/ForegroundPickerButton")
+background_picker_dir = NodePath("MainArea/ColorSwatches/BackgroundPickerButton")
 pen_pressure_settings_dir = NodePath("MainArea/PenPressureSettings")
 button_opacity_pressure_dir = NodePath("MainArea/PenPressureSettings/BtnOpacityPressure")
 button_size_pressure_dir = NodePath("MainArea/PenPressureSettings/BtnSizePressure")
@@ -35,8 +38,8 @@ brush_spacing_slider_dir = NodePath("MainArea/Sliders/Spacing")
 blend_modes_path = NodePath("MainArea/BlendModes")
 
 [node name="MainArea" type="VBoxContainer" parent="."]
-anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = 140.0
 rect_min_size = Vector2( 192, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -114,31 +117,36 @@ margin_right = 192.0
 margin_bottom = 52.0
 text = "OpacityPressure"
 
-[node name="ColorSwatches" type="HBoxContainer" parent="MainArea"]
+[node name="ColorSwatches" type="Control" parent="MainArea"]
 margin_top = 192.0
 margin_right = 192.0
 margin_bottom = 256.0
 rect_min_size = Vector2( 0, 64 )
-alignment = 1
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="MainArea/ColorSwatches"]
-margin_left = 46.0
-margin_top = 16.0
-margin_right = 94.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 48, 32 )
-size_flags_vertical = 4
-flat = true
-
-[node name="ColorPickerButton2" type="ColorPickerButton" parent="MainArea/ColorSwatches"]
-margin_left = 98.0
-margin_top = 16.0
-margin_right = 146.0
-margin_bottom = 48.0
+[node name="BackgroundPickerButton" type="ColorPickerButton" parent="MainArea/ColorSwatches"]
+margin_left = 75.7366
+margin_top = 17.0
+margin_right = 123.737
+margin_bottom = 49.0
 rect_min_size = Vector2( 48, 32 )
 size_flags_vertical = 4
 flat = true
 color = Color( 1, 1, 1, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ForegroundPickerButton" type="ColorPickerButton" parent="MainArea/ColorSwatches"]
+margin_left = 58.0271
+margin_top = 8.87282
+margin_right = 106.027
+margin_bottom = 40.8728
+rect_min_size = Vector2( 48, 32 )
+size_flags_vertical = 4
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="BlendModes" type="OptionButton" parent="MainArea"]
 margin_left = 32.0
@@ -225,16 +233,46 @@ max_value = 1.0
 step = 0.01
 value = 0.1
 
-[node name="DuplicateButton" type="ToolButton" parent="."]
+[node name="BottomBar" type="HBoxContainer" parent="."]
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 8.0
-margin_top = -48.0
-margin_right = 52.0
-margin_bottom = -8.0
+margin_top = -40.0
+custom_constants/separation = 55
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DuplicateButton" type="ToolButton" parent="BottomBar"]
+margin_right = 44.0
+margin_bottom = 40.0
 hint_tooltip = "Make local copy:
 Duplicates the original mesh and allows you to make changes without affecting the orginal mesh."
 icon = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UndoRedo" type="HBoxContainer" parent="BottomBar"]
+margin_left = 99.0
+margin_right = 191.0
+margin_bottom = 40.0
+
+[node name="UndoButton" type="ToolButton" parent="BottomBar/UndoRedo"]
+margin_right = 44.0
+margin_bottom = 40.0
+hint_tooltip = "Undo (Z)"
+icon = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RedoButton" type="ToolButton" parent="BottomBar/UndoRedo"]
+margin_left = 48.0
+margin_right = 92.0
+margin_bottom = 40.0
+hint_tooltip = "Redo (Y)"
+icon = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

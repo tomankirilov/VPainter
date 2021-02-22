@@ -8,7 +8,10 @@ var ui_activate_button
 var brush_cursor
 
 var edit_mode:bool setget _set_edit_mode
+
 var paint_color:Color
+var foreground_color:Color
+var background_color:Color
 
 enum {MIX, ADD, SUBTRACT, MULTIPLY, DIVIDE}
 var blend_mode = MIX
@@ -55,9 +58,6 @@ func forward_spatial_gui_input(camera, event) -> bool:
 	_display_brush()
 	_calculate_brush_pressure(event)
 	_raycast(camera, event)
-
-
-
 	return _user_input(event) #the returned value blocks or unblocks the default input from godot
 
 
@@ -73,55 +73,108 @@ func _user_input(event) -> bool:
 			process_drawing = false
 			_set_collision()
 			return false
-	
-	if event is InputEventKey and event.scancode == KEY_Z:
-		_restore_data()
-		return true
 
-	if event is InputEventKey and event.scancode == KEY_CONTROL:
+	elif event is InputEventKey and event.scancode == KEY_CONTROL:
 		if event.is_pressed():
 			invert_brush = true
 			return false
 		else:
 			invert_brush = false
 			return false
+
+	elif event is InputEventKey and event.scancode == KEY_Z:
+		if event.is_pressed():
+			_undo()
+			return true
+		else:
+			return false
+
+	elif event is InputEventKey and event.scancode == KEY_Y:
+		if event.is_pressed():
+			_redo()
+			return true
+		else:
+			return false
+	elif event is InputEventKey and event.scancode == KEY_X:
+		if event.is_pressed():
+			_swap_colors()
+			return true
+		else:
+			return false
 	else:
 		return false
 
 
-var undo_data_color:Array
-var undo_data_pos:Array
+var undo_data:Array
+var max_undo_steps:int = 5
+var history_step:int = 0
 
 func _store_data():
 	var data = MeshDataTool.new()
 	data.create_from_surface(current_mesh.mesh, 0)
-	
-	undo_data_color.clear()
-	undo_data_pos.clear()
+
+	var col:Array
+	var pos:Array
 
 	for i in range(data.get_vertex_count()):
-		undo_data_color.append(data.get_vertex_color(i))
-		undo_data_pos.append(data.get_vertex(i))
-	
-	
+		col.append(data.get_vertex_color(i))
+		pos.append(data.get_vertex(i))
 
-func _restore_data():
+	undo_data.push_front([col, pos])
+	if undo_data.size() > max_undo_steps:
+		undo_data.remove(undo_data.size() - 1)
+
+	history_step = 0
+
+func _apply_history_step(step):
+	if step < 0:
+		return
+	if step > undo_data.size():
+		return
+
 	var data = MeshDataTool.new()
 	data.create_from_surface(current_mesh.mesh, 0)
 
 	for i in range(data.get_vertex_count()):
-		data.set_vertex_color(i, undo_data_color[i])
-		data.set_vertex(i, undo_data_pos[i])
+								#level of undo, vcolor, vertex id
+		data.set_vertex_color(i, undo_data[step][0][i])
+								#level of undo, vpos, vertex id
+		data.set_vertex(i, undo_data[step][1][i])
 
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
 
+func _undo():
+	if history_step < max_undo_steps and history_step >= 0:
+		print(history_step)
+		_apply_history_step(history_step)
+		history_step += 1
+		history_step = clamp(history_step, 0, max_undo_steps)
+	else:
+		print("can't undo")
+
+func _redo():
+	if history_step <= max_undo_steps and history_step >= 0:
+		print(history_step)
+		_apply_history_step(history_step)
+		history_step -= 1
+		history_step = clamp(history_step, 0, max_undo_steps)
+	else:
+		print("can't redo")
+
+
+func _swap_colors():
+	if paint_color == foreground_color:
+		paint_color = background_color
+	elif paint_color == background_color:
+		paint_color = foreground_color
+	else:
+		return
 
 func _process_drawing():
 	while process_drawing:
 		call(current_tool)
 		yield(get_tree().create_timer(brush_spacing), "timeout")
-
 
 func _display_brush() -> void:
 	if raycast_hit:
@@ -313,6 +366,8 @@ func _selection_changed() -> void:
 		ui_activate_button._hide()
 
 func _enter_tree() -> void:
+	foreground_color = Color.white
+	background_color = Color.black
 	#SETUP THE SIDEBAR:
 	ui_sidebar = preload("res://addons/vpainter/vpainter_ui.tscn").instance()
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)
@@ -332,6 +387,7 @@ func _enter_tree() -> void:
 	add_child(brush_cursor)
 
 func _exit_tree() -> void:
+	_delete_collision()
 	#REMOVE THE SIDEBAR:
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)
 	if ui_sidebar:

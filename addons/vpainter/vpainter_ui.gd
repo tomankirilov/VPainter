@@ -6,9 +6,17 @@ var vpainter
 export var local_copy_button_path:NodePath
 var local_copy_button:ToolButton
 
+
+#UNDO REDO:
+export var undo_button_path:NodePath
+var undo_button:ToolButton
+
+export var redo_button_path:NodePath
+var redo_button:ToolButton
+
 #COLOR PICKER:
-export var color_picker_dir:NodePath
-var color_picker:ColorPickerButton
+export var foreground_picker_dir:NodePath
+var foreground_picker:ColorPickerButton
 
 export var background_picker_dir:NodePath
 var background_picker:ColorPickerButton
@@ -58,13 +66,17 @@ func _enter_tree():
 	local_copy_button = get_node(local_copy_button_path)
 	local_copy_button.connect("button_down", self, "_make_local_copy")
 	
-	color_picker = get_node(color_picker_dir)
-	color_picker.connect("color_changed", self, "_set_paint_color")
+	undo_button = get_node(undo_button_path)
+	undo_button.connect("button_down", self, "_undo")
 	
+	redo_button = get_node(redo_button_path)
+	redo_button.connect("button_down", self, "_redo")
+	
+	foreground_picker = get_node(foreground_picker_dir)
+	foreground_picker.connect("color_changed", self, "_set_foreground_color")
 	background_picker = get_node(background_picker_dir)
 	background_picker.connect("color_changed", self, "_set_background_color")
-	
-	
+
 	pen_pressure_settings = get_node(pen_pressure_settings_dir)
 	
 	button_opacity_pressure = get_node(button_opacity_pressure_dir)
@@ -113,14 +125,23 @@ func _exit_tree():
 func _make_local_copy():
 	vpainter._make_local_copy()
 
-func _set_paint_color(value):
-	color_picker.set_pick_color(value)
+func _undo():
+	vpainter._undo()
+	pass
+
+func _redo():
+	vpainter._redo()
+	pass
+
+func _set_foreground_color(value):
+	foreground_picker.set_pick_color(value)
+	vpainter.foreground_color = value
 	vpainter.paint_color = value
 
 func _set_background_color(value):
 	background_picker.set_pick_color(value)
+	vpainter.background_color = value
 	vpainter.paint_color = value
-
 
 func _set_blend_mode(id):
 	#MIX, ADD, SUBTRACT, MULTIPLY, DIVIDE
@@ -214,7 +235,6 @@ func _set_displace_tool(value):
 		button_displace.set_pressed(true)
 		button_fill.set_pressed(false)
 
-
 func _set_fill_tool(value):
 	if value:
 		vpainter.current_tool = "_fill_tool"
@@ -226,7 +246,6 @@ func _set_fill_tool(value):
 		button_blur.set_pressed(false)
 		button_displace.set_pressed(false)
 		button_fill.set_pressed(true)
-
 
 func _set_brush_size(value):
 	brush_size_slider.value = value
