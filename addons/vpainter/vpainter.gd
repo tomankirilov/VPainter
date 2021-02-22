@@ -21,9 +21,7 @@ var sculpt_mode = STANDART
 
 var current_tool = "_paint_tool"
 
-
 var invert_brush = false
-
 
 var pressure_opacity:bool = false
 var pressure_size:bool = false
@@ -46,10 +44,8 @@ var raycast_hit:bool = false
 var hit_position
 var hit_normal
 
-
 func handles(obj) -> bool:
 	return editable_object
-
 
 func forward_spatial_gui_input(camera, event) -> bool:
 	if !edit_mode:
@@ -161,7 +157,6 @@ func _redo():
 		history_step = clamp(history_step, 0, max_undo_steps)
 	else:
 		print("can't redo")
-
 
 func _swap_colors():
 	if paint_color == foreground_color:
@@ -303,8 +298,8 @@ func _sample_tool() -> void:
 			closest_vertex_index = i
 	
 	var picked_color = data.get_vertex_color(closest_vertex_index)
-	paint_color = Color(picked_color.r, picked_color.g, picked_color.b, 1)
-	ui_sidebar._set_paint_color(paint_color)
+	foreground_color = Color(picked_color.r, picked_color.g, picked_color.b, 1)
+	ui_sidebar._set_foreground_color(paint_color)
 	
 	current_mesh.mesh.surface_remove(0)
 	data.commit_to_surface(current_mesh.mesh)
