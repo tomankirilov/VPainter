@@ -1,6 +1,6 @@
 @tool
+class_name VPainterData
 extends Resource
-class_name VpainterData
 
 signal active_tool_changed(value:int)
 @export var active_tool:int = 0:
@@ -75,5 +75,8 @@ signal erase_color_changed(value:Color)
 		erase_color = value
 		emit_signal("erase_color_changed", value)
 
-
-@export_flags_3d_physics var collision_layer = 524288
+signal collision_mask_changed(value:int)
+@export_flags_3d_physics var collision_mask :int = 524288:
+	set(value):
+		collision_mask = value
+		emit_signal("collision_mask_changed", value)

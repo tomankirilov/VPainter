@@ -27,27 +27,30 @@ signal bracketright_down
 signal bracketright_up
 
 
+var plugin:EditorPlugin
+func _init(plugin:EditorPlugin):
+	self.plugin = plugin
 
-func _run(event :InputEvent) -> int:
+
+func run(event :InputEvent) -> int:
 ########################################################
 #       MOUSE BUTTON        ############################
 	if event is InputEventMouse:
 		is_mouse_moving = true
 		mouse_screen_position = event.position
-		emit_signal("mouse_moved")
 	else:
 		is_mouse_moving = false
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
 			is_lmb_down = true
-			emit_signal("lmb_down")
-			
+			print("LMB Down")
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
 		else:
 			is_lmb_down = false
-			emit_signal("lmb_up")
+			print("LMB Up")
 			return EditorPlugin.AFTER_GUI_INPUT_PASS
+
 
 
 
