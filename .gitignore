@@ -1,6 +1,7 @@
 testing/**
 example/**
 .import/**
+.godot/**
 *.import
 default_env.tres
 icon.png
