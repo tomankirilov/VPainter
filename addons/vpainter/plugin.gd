@@ -75,7 +75,6 @@ func _enter_tree():
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)
 
 	brush_cursor = load("res://addons/vpainter/res/brush_cursor/brush_cursor.tscn").instantiate()
-	brush_cursor.plugin = self
 	add_child(brush_cursor)
 
 func _exit_tree():

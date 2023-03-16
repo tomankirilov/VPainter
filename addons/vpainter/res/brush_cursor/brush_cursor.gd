@@ -8,8 +8,7 @@ var raycast
 
 func _ready() -> void:
 	hide()
-	await get_tree().create_timer(0.1).timeout
-
+	plugin = get_parent()
 	plugin.edit_mode_changed.connect(on_edit_mode_changed)
 	user_input = plugin.user_input
 	raycast = plugin.raycast
