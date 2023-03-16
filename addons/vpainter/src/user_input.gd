@@ -38,6 +38,7 @@ func run(event :InputEvent) -> int:
 	if event is InputEventMouse:
 		is_mouse_moving = true
 		mouse_screen_position = event.position
+		mouse_moved.emit()
 	else:
 		is_mouse_moving = false
 

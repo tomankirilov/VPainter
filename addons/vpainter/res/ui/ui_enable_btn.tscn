@@ -1,5 +1,8 @@
-[gd_scene format=3 uid="uid://clcj8u6hoikkf"]
+[gd_scene load_steps=2 format=3 uid="uid://clcj8u6hoikkf"]
+
+[ext_resource type="Script" path="res://addons/vpainter/res/ui/ui_enable_btn.gd" id="1_33ej6"]
 
 [node name="vpainter" type="Button"]
 text = "VPainter"
 flat = true
+script = ExtResource("1_33ej6")

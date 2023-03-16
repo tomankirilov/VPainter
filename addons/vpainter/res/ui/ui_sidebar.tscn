@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://cxw0ff7o7k6wc"]
+[gd_scene load_steps=2 format=3 uid="uid://cxw0ff7o7k6wc"]
+
+[ext_resource type="Script" path="res://addons/vpainter/res/ui/ui_sidebar.gd" id="1_1tfh7"]
 
 [node name="side_pannel" type="Control"]
 custom_minimum_size = Vector2(300, 0)
@@ -7,6 +9,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 250.0
 grow_vertical = 2
+script = ExtResource("1_1tfh7")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1

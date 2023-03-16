@@ -3,7 +3,7 @@
 extends Node
 
 
-var is_hit:bool          = false
+var is_hit:bool = false
 var hit_position:Vector3
 var hit_normal:  Vector3
 
