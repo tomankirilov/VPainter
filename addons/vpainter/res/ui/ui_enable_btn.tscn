@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://clcj8u6hoikkf"]
+
+[node name="vpainter" type="Button"]
+text = "VPainter"
+flat = true

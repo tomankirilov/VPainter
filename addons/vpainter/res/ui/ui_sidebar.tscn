@@ -1,0 +1,181 @@
+[gd_scene format=3 uid="uid://cxw0ff7o7k6wc"]
+
+[node name="side_pannel" type="Control"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 3
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 250.0
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Vertex color painting:"
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Tools" type="OptionButton" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Paint"
+popup/item_0/id = 0
+popup/item_1/text = "Fill"
+popup/item_1/id = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="EditableChannels" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="R" type="CheckBox" parent="MarginContainer/VBoxContainer/EditableChannels"]
+layout_mode = 2
+button_pressed = true
+text = "R"
+
+[node name="G" type="CheckBox" parent="MarginContainer/VBoxContainer/EditableChannels"]
+layout_mode = 2
+button_pressed = true
+text = "G
+"
+alignment = 2
+
+[node name="B" type="CheckBox" parent="MarginContainer/VBoxContainer/EditableChannels"]
+layout_mode = 2
+button_pressed = true
+text = "B
+"
+alignment = 2
+
+[node name="A" type="CheckBox" parent="MarginContainer/VBoxContainer/EditableChannels"]
+layout_mode = 2
+button_pressed = true
+text = "A"
+alignment = 2
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Colors" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/Colors"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Colors/GridContainer"]
+layout_mode = 2
+text = "Paint color:"
+
+[node name="PaintColor" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/Colors/GridContainer"]
+custom_minimum_size = Vector2(46, 32)
+layout_mode = 2
+flat = true
+alignment = 0
+color = Color(1, 1, 1, 1)
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/Colors/GridContainer"]
+layout_mode = 2
+text = "Erase color:"
+
+[node name="EraseColor" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/Colors/GridContainer"]
+custom_minimum_size = Vector2(46, 32)
+layout_mode = 2
+flat = true
+alignment = 0
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Size:"
+
+[node name="Size" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0.01
+max_value = 10.0
+step = 0.01
+value = 1.0
+exp_edit = true
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Opacity:"
+
+[node name="Opacity" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.1
+value = 0.1
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Hardness:"
+
+[node name="Hardness" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.1
+value = 0.5
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Spacing:"
+
+[node name="Spacing" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 0.1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2

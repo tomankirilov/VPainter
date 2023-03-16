@@ -1,0 +1,16 @@
+2a60927148abd1d33b818b535e306557
+::res://::1678964079
+icon.svg::CompressedTexture2D::188783048391585051::1678961581::1678961586::1::::<><>::
+::res://addons/::1678962014
+::res://addons/vpainter/::1678964013
+data.tres::Resource/Resource::5859953204600594805::1678962006::0::1::::<><>::res://addons/vpainter/src/vpainter_data.gd
+plugin.cfg::TextFile::-1::1678961744::0::1::::<><>::
+plugin.gd::GDScript::-1::1678964013::0::1::::<>EditorPlugin<>::
+::res://addons/vpainter/res/::1678962275
+::res://addons/vpainter/res/brush_cursor/::1678962275
+::res://addons/vpainter/res/ui/::1678963988
+ui_enable_btn.tscn::PackedScene::5549653885739460417::1678963988::0::1::::<><>::
+ui_sidebar.tscn::PackedScene::6434128248168728442::1678963963::0::1::::<><>::
+::res://addons/vpainter/src/::1678964079
+raycast.gd::GDScript::-1::1678964080::0::1::::<>Node<>::
+vpainter_data.gd::GDScript::-1::1678962056::0::1::::VpainterData<>Resource<>::

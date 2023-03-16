@@ -1,0 +1,11 @@
+res://addons/vpainter/plugin.cfg
+res://addons/vpainter/src/vpainter_data.gd
+res://addons/vpainter/plugin.gd
+res://addons/vpainter/res/ui/vpainter.tscn
+res://addons/vpainter/res/ui/ui_vpainter_entry.tscn
+res://addons/vpainter/res/ui/ui_vpainter_sidebar.tscn
+res://addons/vpainter/res/ui/ui_sidebar.tscn
+res://addons/vpainter/res/ui/ui_enable_btn.tscn
+res://addons/vpainter/src/operators.gd
+res://addons/vpainter/src/raycast.gd
+res://addons/vpainter/src/user_input.gd
