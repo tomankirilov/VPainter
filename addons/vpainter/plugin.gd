@@ -74,9 +74,13 @@ func _enter_tree():
 	ui_sidebar.plugin = self
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)
 
+	operators.name = "Operators"
+	add_child(operators)
+
 	brush_cursor = load("res://addons/vpainter/res/brush_cursor/brush_cursor.tscn").instantiate()
 	add_child(brush_cursor)
 
 func _exit_tree():
+	print_tree()
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, ui_enable_button)
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, ui_sidebar)

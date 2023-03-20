@@ -5,14 +5,15 @@ extends MeshInstance3D
 var plugin:EditorPlugin
 var user_input
 var raycast
+var data
 
-func _ready() -> void:
+func _enter_tree() -> void:
 	hide()
 	plugin = get_parent()
 	plugin.edit_mode_changed.connect(on_edit_mode_changed)
 	user_input = plugin.user_input
-	raycast = plugin.raycast
 	user_input.mouse_moved.connect(on_mouse_moved)
+	raycast = plugin.raycast
 
 func on_mouse_moved() -> void:
 	position = raycast.hit_position
@@ -27,6 +28,7 @@ func on_edit_mode_changed(value:bool) -> void:
 		show()
 	else:
 		hide()
+
 
 
 func on_brush_size_changed(value:float) -> void:

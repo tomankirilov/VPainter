@@ -1,8 +1,8 @@
 @tool
 extends Button
 
-
 var plugin:EditorPlugin
+
 
 func _enter_tree() -> void:
 	hide()

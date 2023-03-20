@@ -9,7 +9,7 @@ var hit_normal:  Vector3
 
 var plugin:EditorPlugin
 var data:VPainterData
-var collision_mask:int = 524288
+var collision_mask:int #= 524288
 
 
 func _init(plugin:EditorPlugin) -> void:

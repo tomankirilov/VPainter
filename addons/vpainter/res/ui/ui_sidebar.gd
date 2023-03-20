@@ -16,6 +16,7 @@ func on_selection_is_editable(value):
 	else:
 		hide()
 
+
 func on_edit_mode_changed(value:bool) -> void:
 	if value:
 		show()
