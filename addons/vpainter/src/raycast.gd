@@ -47,5 +47,3 @@ func run(camera:Camera3D, event:InputEvent) -> void:
 		is_hit = true
 		hit_position = _hit.position
 		hit_normal = _hit.normal
-
-#		print(hit_position)

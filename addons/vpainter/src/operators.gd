@@ -6,18 +6,37 @@ var collision_mask:int
 var collision_parent:StaticBody3D
 
 var plugin:EditorPlugin
+var raycast
+var input
+
 func _init(plugin:EditorPlugin):
 	self.plugin = plugin
 	data = load("res://addons/vpainter/data.tres")
 	data.collision_mask_changed.connect(on_collision_mask_changed)
+	input = plugin.user_input
+	raycast = plugin.raycast
+
+	input.lmb_down.connect(on_lmb_down)
+	input.lmb_up.connect(on_lmb_up)
 	plugin.edit_mode_changed.connect(on_edit_mode_changed)
+
+
+func on_lmb_down():
+	if input.is_ctrl_down:
+		print('start paint process')
+	else:
+		print('start paint process')
+
+func on_lmb_up():
+	print('stop brush process')
+
+
 
 func on_collision_mask_changed(value:int) -> void:
 	collision_mask = value
 
 func on_edit_mode_changed(value):
 	if value:
-		
 		generate_collider()
 	else:
 		clean_colliders()
@@ -27,6 +46,16 @@ func _enter_tree():
 
 
 #OPERATORS:
+
+func fill() -> void:
+	pass
+
+func paint() -> void:
+	pass
+
+func erase() -> void:
+	pass
+
 func generate_collider() -> void:
 
 	collision_parent = StaticBody3D.new()
@@ -70,10 +99,4 @@ func copy_color_data() -> void:
 	pass
 
 func paste_color_data() -> void:
-	pass
-
-func save_color_data() -> void:
-	pass
-
-func load_color_data() -> void:
 	pass

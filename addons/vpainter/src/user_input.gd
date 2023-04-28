@@ -9,7 +9,6 @@ signal lmb_down
 signal lmb_up
 var is_lmb_down:bool = false
 
-
 var is_shift_down:bool = false
 signal shift_down
 signal shift_up
@@ -44,12 +43,12 @@ func run(event :InputEvent) -> int:
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
+			emit_signal('lmb_down')
 			is_lmb_down = true
-			print("LMB Down")
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
 		else:
+			emit_signal('lmb_up')
 			is_lmb_down = false
-			print("LMB Up")
 			return EditorPlugin.AFTER_GUI_INPUT_PASS
 
 

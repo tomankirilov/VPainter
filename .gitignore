@@ -1,5 +1,6 @@
 testing/**
 example/**
+addons/plugin_refresher/**
 .import/**
 .godot/**
 *.import
@@ -9,6 +10,6 @@ icon.svg
 project.godot
 
 *.obj
-
 *.import
 *.import
+.godot/
