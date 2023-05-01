@@ -44,7 +44,7 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent) -> int:
 		return EditorPlugin.AFTER_GUI_INPUT_PASS
 
 func on_selection_changed():
-	var selection :Array = get_editor_interface().get_selection().get_selected_nodes()
+	selection = get_editor_interface().get_selection().get_selected_nodes()
 
 	if selection.size() == 0:
 		is_selection_editable = false

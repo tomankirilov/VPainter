@@ -4,15 +4,15 @@
 
 [resource]
 script = ExtResource("1_5j4gp")
-active_tool = 0
+active_tool = 1
 edit_r = true
 edit_g = true
 edit_b = true
-edit_a = true
+edit_a = false
 brush_size = 1.0
 brush_opacity = 1.0
 brush_spacing = 1.0
 brush_falloff = 1.0
-paint_color = Color(1, 1, 1, 1)
+paint_color = Color(0.666667, 0.188235, 0.0784314, 1)
 erase_color = Color(0, 0, 0, 1)
 collision_mask = 2147483648

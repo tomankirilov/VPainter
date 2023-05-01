@@ -1,5 +1,5 @@
 @tool
-extends Node3D
+extends EditorPlugin
 
 var data:VPainterData
 var collision_mask:int
@@ -21,14 +21,25 @@ func _init(plugin:EditorPlugin):
 	plugin.edit_mode_changed.connect(on_edit_mode_changed)
 
 
+var process_painting:bool = false
 func on_lmb_down():
-	if input.is_ctrl_down:
-		print('start paint process')
-	else:
-		print('start paint process')
+	if !input.is_ctrl_down:
+		if data.active_tool == 0:
+			process_painting = true
+			paint(data.paint_color)
+		else:
+			fill(data.paint_color, data.brush_opacity)
+			print('Filling meshes with paint color.')
+	else: #ctrl is pressed
+		if data.active_tool == 0:
+			process_painting = true
+			paint(data.erase_color)
+		else:
+			fill(data.erase_color, data.brush_opacity)
+			print('Filling meshes with erase color.')
 
 func on_lmb_up():
-	print('stop brush process')
+	process_painting = false
 
 
 
@@ -46,15 +57,44 @@ func _enter_tree():
 
 
 #OPERATORS:
+func fill(color:Color, opacity:float) -> void:
 
-func fill() -> void:
-	pass
+	for mesh_instance in plugin.selection:
+		var mdtool:MeshDataTool = MeshDataTool.new()
+		var mesh:Mesh = mesh_instance.mesh as Mesh
+		mdtool.create_from_surface(mesh, 0)
 
-func paint() -> void:
-	pass
+		for id in range(mdtool.get_vertex_count()):
+			var vertex = mdtool.get_vertex(id)
+			var current_color := mdtool.get_vertex_color(id)
+			var desired_color := current_color
 
-func erase() -> void:
-	pass
+			if data.edit_r:
+				desired_color.r = color.r
+			if data.edit_g:
+				desired_color.g = color.g
+			if data.edit_b:
+				desired_color.b = color.b
+			if data.edit_a:
+				desired_color.a = color.a
+
+			var result_color  := lerp(current_color, desired_color, opacity)
+
+			mdtool.set_vertex_color(id, result_color)
+		
+		mesh.clear_surfaces()
+		mdtool.commit_to_surface(mesh)
+
+
+func paint(color:Color) -> void:
+	while process_painting:
+
+
+
+
+		print("PAINTING..")
+		await get_tree().create_timer(data.brush_spacing).timeout
+
 
 func generate_collider() -> void:
 
