@@ -26,14 +26,14 @@ func on_lmb_down():
 	if !input.is_ctrl_down:
 		if data.active_tool == 0:
 			process_painting = true
-			paint(data.paint_color)
+			paint(data.paint_color, data.brush_opacity, data.brush_spacing, data.brush_falloff)
 		else:
 			fill(data.paint_color, data.brush_opacity)
 			print('Filling meshes with paint color.')
 	else: #ctrl is pressed
 		if data.active_tool == 0:
 			process_painting = true
-			paint(data.erase_color)
+			paint(data.paint_color, data.brush_opacity, data.brush_spacing, data.brush_falloff)
 		else:
 			fill(data.erase_color, data.brush_opacity)
 			print('Filling meshes with erase color.')
@@ -65,7 +65,6 @@ func fill(color:Color, opacity:float) -> void:
 		mdtool.create_from_surface(mesh, 0)
 
 		for id in range(mdtool.get_vertex_count()):
-			var vertex = mdtool.get_vertex(id)
 			var current_color := mdtool.get_vertex_color(id)
 			var desired_color := current_color
 
@@ -86,14 +85,36 @@ func fill(color:Color, opacity:float) -> void:
 		mdtool.commit_to_surface(mesh)
 
 
-func paint(color:Color) -> void:
+func paint(color:Color, opacity:float, spacing:float, falloff:float) -> void:
 	while process_painting:
+		for mesh_instance in plugin.selection:
+			var mdtool:MeshDataTool = MeshDataTool.new()
+			var mesh:Mesh = mesh_instance.mesh as Mesh
+			mdtool.create_from_surface(mesh, 0)
 
+			for id in range(mdtool.get_vertex_count()):
+				
+				var vertex = mdtool.to_global(data.get_vertex(id))
+				var current_color := mdtool.get_vertex_color(id)
+				var desired_color := current_color
 
+				if data.edit_r:
+					desired_color.r = color.r
+				if data.edit_g:
+					desired_color.g = color.g
+				if data.edit_b:
+					desired_color.b = color.b
+				if data.edit_a:
+					desired_color.a = color.a
 
+				var result_color  := lerp(current_color, desired_color, opacity)
 
+				mdtool.set_vertex_color(id, result_color)
+			
+			mesh.clear_surfaces()
+			mdtool.commit_to_surface(mesh)
 		print("PAINTING..")
-		await get_tree().create_timer(data.brush_spacing).timeout
+		await get_tree().create_timer(spacing).timeout
 
 
 func generate_collider() -> void:
