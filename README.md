@@ -1,9 +1,9 @@
+
+ # **THE BRANCH FOR 4.X is STILL A WORK IN PROGRESS AND NOT WORKING!!!**
 ![](images/logo.png)
 # A vertex painting addon for the Godot game engine.
 
 [![](images/Thumbnail.png)](https://youtu.be/g87ov35zvjE)
- 
- # **THE BRANCH FOR 4.X is STILL A WORK IN PROGRESS AND NOT WORKING!!!**
  
   
 ![](images/preview.gif)
