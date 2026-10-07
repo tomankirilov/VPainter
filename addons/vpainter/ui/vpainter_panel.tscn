@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://tgt5v61ir1e1"]
+
+[ext_resource type="Script" uid="uid://cpumvolpu855k" path="res://addons/vpainter/ui/vpainter_panel.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cilsdtqgqm4id" path="res://addons/vpainter/res/icons/swap_colors.svg" id="2_swap"]
+
+[node name="VPainterPanel" type="PanelContainer" unique_id=256920908]
+custom_minimum_size = Vector2(240, 0)
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 227.0
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1715080738]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Content" type="VBoxContainer" parent="Margin" unique_id=479234408]
+layout_mode = 2
+
+[node name="Menus" type="HBoxContainer" parent="Margin/Content" unique_id=121814245]
+layout_mode = 2
+
+[node name="FileMenu" type="MenuButton" parent="Margin/Content/Menus" unique_id=1760809405]
+unique_name_in_owner = true
+layout_mode = 2
+text = "File"
+item_count = 2
+popup/item_0/text = "Reload mesh..."
+popup/item_0/id = 0
+popup/item_1/text = "Rebuild LODs"
+popup/item_1/id = 1
+
+[node name="EditMenu" type="MenuButton" parent="Margin/Content/Menus" unique_id=1006322927]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Edit"
+item_count = 2
+popup/item_0/text = "Copy vertex colors"
+popup/item_0/id = 0
+popup/item_1/text = "Paste vertex colors"
+popup/item_1/id = 1
+popup/item_1/disabled = true
+
+[node name="HSeparator" type="HSeparator" parent="Margin/Content" unique_id=1519754589]
+layout_mode = 2
+
+[node name="Tool" type="OptionButton" parent="Margin/Content" unique_id=1415960346]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Paint and Blur: drag on the mesh. Fill: click the mesh once."
+selected = 0
+item_count = 3
+popup/item_0/text = "Paint"
+popup/item_0/id = 0
+popup/item_1/text = "Fill"
+popup/item_1/id = 1
+popup/item_2/text = "Blur"
+popup/item_2/id = 2
+
+[node name="PaintColors" type="HBoxContainer" parent="Margin/Content" unique_id=1945600560]
+layout_mode = 2
+
+[node name="Color" type="ColorPickerButton" parent="Margin/Content/PaintColors" unique_id=317564165]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Active paint color"
+color = Color(1, 1, 1, 1)
+
+[node name="SwapColors" type="Button" parent="Margin/Content/PaintColors" unique_id=854392608]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Swap paint colors (X)"
+focus_mode = 0
+icon = ExtResource("2_swap")
+
+[node name="SecondaryColor" type="ColorPickerButton" parent="Margin/Content/PaintColors" unique_id=1325996979]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Secondary paint color — swap with X to use it"
+
+[node name="Channels" type="HBoxContainer" parent="Margin/Content" unique_id=1162532344]
+layout_mode = 2
+
+[node name="R" type="CheckBox" parent="Margin/Content/Channels" unique_id=2145022808]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "R"
+
+[node name="G" type="CheckBox" parent="Margin/Content/Channels" unique_id=602513196]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "G"
+
+[node name="B" type="CheckBox" parent="Margin/Content/Channels" unique_id=200934592]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "B"
+
+[node name="A" type="CheckBox" parent="Margin/Content/Channels" unique_id=1586697243]
+unique_name_in_owner = true
+layout_mode = 2
+text = "A"
+
+[node name="HSeparator2" type="HSeparator" parent="Margin/Content" unique_id=1317954598]
+layout_mode = 2
+
+[node name="RadiusLabel" type="Label" parent="Margin/Content" unique_id=1744965105]
+layout_mode = 2
+text = "Size"
+
+[node name="Radius" type="SpinBox" parent="Margin/Content" unique_id=1186797347]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "[ multiplies radius by 0.8; ] multiplies it by 1.25. Opposite presses restore the size unless a limit is reached."
+min_value = 0.01
+max_value = 1000.0
+step = 0.0
+value = 0.5
+
+[node name="HSeparator3" type="HSeparator" parent="Margin/Content" unique_id=1869860920]
+layout_mode = 2
+
+[node name="StrengthLabel" type="Label" parent="Margin/Content" unique_id=1638321715]
+layout_mode = 2
+text = "Strength"
+
+[node name="Strength" type="SpinBox" parent="Margin/Content" unique_id=88781948]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 0.25
+
+[node name="HSeparator4" type="HSeparator" parent="Margin/Content" unique_id=2000522427]
+layout_mode = 2
+
+[node name="PaintRateLabel" type="Label" parent="Margin/Content" unique_id=81680167]
+layout_mode = 2
+text = "Paint rate"
+
+[node name="PaintRate" type="SpinBox" parent="Margin/Content" unique_id=1200255849]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "How quickly paint builds up while dragging. Lower values are slower; higher values are faster."
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+value = 0.1
+
+[node name="HSeparator5" type="HSeparator" parent="Margin/Content" unique_id=1175742366]
+layout_mode = 2

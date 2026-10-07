@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c6tckgi2q0ap5"]
+
+[ext_resource type="Texture2D" uid="uid://bgr3akd27it68" path="res://addons/vpainter/res/icons/icon_vpainter.svg" id="1_icon"]
+
+[node name="VPainterButton" type="Button" unique_id=444290990]
+tooltip_text = "Show vertex painting tools"
+toggle_mode = true
+text = "VPainter"
+icon = ExtResource("1_icon")

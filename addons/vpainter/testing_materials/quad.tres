@@ -1,0 +1,19 @@
+[gd_resource type="ArrayMesh" format=4 uid="uid://clm8qc78q28rp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u5dmc"]
+
+[resource]
+resource_name = "vpainter_test_meshes_quad"
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 2, 1e-05, 2),
+"attribute_data": PackedByteArray("/7//P///AAD///8//78AAP+//3////9//3//P/9/AAD/f/9//7//v////7//v/////////9/////f/+//z////8//78AAP//AAD/v/8//38AAP9//z//PwAA/z//PwAAAAAAAA=="),
+"format": 34896613399,
+"index_count": 96,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAAAAIABAACAAUABgADAAAABgAHAAMACAAAAAQACAAGAAAACQAEAAUACQAFAAoACwAJAAoACwAKAAwADQAJAAsADgAEAAkADQAOAAkADgAIAAQADwAOAA0ADwAQAA4AEAAIAA4AEQAQAA8AEQASABAAEAATAAgAEgATABAAEwAGAAgAEgAUABMAEwAVAAYAFAAVABMAFQAHAAYAFAAWABUAFQAXAAcAFgAXABUAFgAYABcA"),
+"material": SubResource("StandardMaterial3D_u5dmc"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 25,
+"vertex_data": PackedByteArray("/78AAP8//7///wAAAAD/v///AAD/P/+//78AAAAA/7//vwAA/3//v///AAD/f/+//38AAP8//7//fwAAAAD/v/9/AAD/f/+//78AAP+//7///wAA/7//v/+/AAD///+///8AAP///7//fwAA////v/9/AAD/v/+//z8AAP///7//PwAA/7//vwAAAAD///+/AAAAAP+//7//PwAA/3//vwAAAAD/f/+//z8AAP8//78AAAAA/z//v/8/AAAAAP+/AAAAAAAA/7////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/")
+}]
+blend_shape_mode = 0
