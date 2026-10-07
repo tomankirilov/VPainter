@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[node name="VPainterDialogs" type="Node"]
+
+[node name="MeshFile" type="EditorFileDialog" parent="."]
+title = "Reload mesh and transfer vertex colors"
+size = Vector2i(800, 550)
+file_mode = 0
+access = 0
+filters = PackedStringArray("*.tres, *.res ; Mesh resources", "*.glb, *.gltf, *.fbx, *.obj, *.blend, *.tscn, *.scn ; Mesh scenes")
+
+[node name="ChooseMesh" type="ConfirmationDialog" parent="."]
+title = "Choose a mesh from the file"
+size = Vector2i(420, 140)
+
+[node name="MeshChoice" type="OptionButton" parent="ChooseMesh"]
+offset_left = 12.0
+offset_top = 16.0
+offset_right = 408.0
+offset_bottom = 48.0
+
+[node name="Message" type="AcceptDialog" parent="."]
+title = "VPainter"
+size = Vector2i(460, 140)
